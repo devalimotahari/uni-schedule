@@ -8,5 +8,6 @@ export const ApiUrls = {
 	users: {
 		me: '/users/me',
 		profile: '/users/profile'
-	}
+	},
+	calculate: '/calc'
 };

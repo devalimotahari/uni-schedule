@@ -19,3 +19,29 @@ export interface IAuthRegister {
 	username: string;
 	password: string;
 }
+
+// calc
+
+export interface IProfessorData {
+	id: number;
+	name: string;
+	pref_days: number[];
+	days: string[];
+}
+
+export interface ICourseData {
+	id: number;
+	name: string;
+	units: number;
+	duration: string;
+	semister: number;
+	professors: number[];
+}
+
+export interface ICalculateBody {
+	settings: Record<string, any>;
+	data: {
+		professors: Array<IProfessorData>;
+		courses: Array<ICourseData>;
+	};
+}
