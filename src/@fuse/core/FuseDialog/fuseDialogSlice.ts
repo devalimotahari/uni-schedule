@@ -1,3 +1,4 @@
+import { DialogProps } from '@mui/material';
 import { createSlice, PayloadAction, WithSlice } from '@reduxjs/toolkit';
 import { rootReducer } from 'app/store/lazyLoadedSlices';
 import { ReactElement } from 'react';
@@ -5,6 +6,7 @@ import { ReactElement } from 'react';
 type InitialStateProps = {
 	open: boolean;
 	children: ReactElement | string;
+	props?: Omit<DialogProps, 'open' | 'children'>;
 };
 
 /**
@@ -12,7 +14,8 @@ type InitialStateProps = {
  */
 const initialState: InitialStateProps = {
 	open: false,
-	children: ''
+	children: '',
+	props: {}
 };
 
 /**
@@ -22,9 +25,12 @@ export const fuseDialogSlice = createSlice({
 	name: 'fuseDialog',
 	initialState,
 	reducers: {
-		openDialog: (state, action: PayloadAction<{ children: InitialStateProps['children'] }>) => {
+		openDialog: (state, action: PayloadAction<Omit<InitialStateProps, 'open'>>) => {
 			state.open = true;
 			state.children = action.payload.children;
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-expect-error
+			state.props = action.payload.props;
 		},
 		closeDialog: () => initialState
 	},

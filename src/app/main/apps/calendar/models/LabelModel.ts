@@ -1,11 +1,11 @@
 import _ from '@lodash';
 import { PartialDeep } from 'type-fest';
-import { Label } from '../CalendarApi';
+import { ILabel } from '../calendarStore';
 
 /**
  * The label model.
  */
-function LabelModel(data?: PartialDeep<Label>) {
+function LabelModel(data?: PartialDeep<ILabel>): ILabel {
 	data = data || {};
 
 	return _.defaults(data, {

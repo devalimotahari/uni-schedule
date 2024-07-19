@@ -13,13 +13,17 @@ function FuseDialog() {
 
 	return (
 		<Dialog
+			open={options.open}
 			onClose={() => dispatch(closeDialog())}
 			aria-labelledby="fuse-dialog-title"
 			classes={{
-				paper: 'rounded-8'
+				paper: 'rounded-8',
+				...options.props?.classes
 			}}
-			{...options}
-		/>
+			{...options.props}
+		>
+			{options.children}
+		</Dialog>
 	);
 }
 

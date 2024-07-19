@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { useEffect, useRef, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -18,8 +18,9 @@ import {
 	EventRemoveArg
 } from '@fullcalendar/core';
 import FuseLoading from '@fuse/core/FuseLoading';
+import CalendarAppCoursesSidebar from './CalendarAppCoursesSidebar';
 import CalendarHeader from './CalendarHeader';
-import CalendarAppSidebar from './CalendarAppSidebar';
+import CalendarAppProfessorsSidebar from './CalendarAppProfessorsSidebar';
 import CalendarAppEventContent from './CalendarAppEventContent';
 import { useCalendarStore } from './calendarStore';
 
@@ -105,10 +106,13 @@ function CalendarApp() {
 	const { events } = useCalendarStore();
 	const calendarRef = useRef<FullCalendar>(null);
 	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
-	const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
+	const [professorsSidebarOpen, setProfessorsSidebarOpen] = useState(!isMobile);
+	const [coursesSidebarOpen, setCoursesSidebarOpen] = useState(!isMobile);
+	const theme = useTheme();
 
 	useEffect(() => {
-		setLeftSidebarOpen(!isMobile);
+		setProfessorsSidebarOpen(!isMobile);
+		setCoursesSidebarOpen(!isMobile);
 	}, [isMobile]);
 
 	useEffect(() => {
@@ -116,7 +120,7 @@ function CalendarApp() {
 		setTimeout(() => {
 			calendarRef.current?.getApi()?.updateSize();
 		}, 300);
-	}, [leftSidebarOpen]);
+	}, [professorsSidebarOpen]);
 
 	const handleDateSelect = (selectInfo: DateSelectArg) => {
 		// dispatch(openNewEventDialog(selectInfo));
@@ -145,6 +149,7 @@ function CalendarApp() {
 
 	const handleEventAdd = (addInfo: EventAddArg) => {
 		// eslint-disable-next-line no-console
+		console.log(calendarRef.current.getApi().view);
 		console.info(addInfo);
 	};
 
@@ -158,8 +163,12 @@ function CalendarApp() {
 		console.info(removeInfo);
 	};
 
-	function handleToggleLeftSidebar() {
-		setLeftSidebarOpen(!leftSidebarOpen);
+	function handleToggleCoursesSidebar() {
+		setCoursesSidebarOpen(!coursesSidebarOpen);
+	}
+
+	function handleToggleProfessorsSidebar() {
+		setProfessorsSidebarOpen(!professorsSidebarOpen);
 	}
 
 	if (isLoading) {
@@ -173,15 +182,19 @@ function CalendarApp() {
 					<CalendarHeader
 						calendarRef={calendarRef}
 						currentDate={currentDate}
-						onToggleLeftSidebar={handleToggleLeftSidebar}
+						onToggleCoursesSidebar={handleToggleCoursesSidebar}
+						onToggleProfessorsSidebar={handleToggleProfessorsSidebar}
 					/>
 				}
 				content={
 					<FullCalendar
 						plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 						headerToolbar={false}
-						initialView="dayGridMonth"
+						initialView="timeGridWeek"
+						locale="fa"
+						allDayText="ساعت"
 						editable
+						direction={theme.direction}
 						selectable
 						selectMirror
 						dayMaxEvents
@@ -198,14 +211,17 @@ function CalendarApp() {
 						eventChange={handleEventChange}
 						eventRemove={handleEventRemove}
 						eventDrop={handleEventDrop}
-						initialDate={new Date(2022, 3, 1)}
 						ref={calendarRef}
 					/>
 				}
-				leftSidebarContent={<CalendarAppSidebar />}
-				leftSidebarOpen={leftSidebarOpen}
-				leftSidebarOnClose={() => setLeftSidebarOpen(false)}
-				leftSidebarWidth={240}
+				leftSidebarContent={<CalendarAppProfessorsSidebar />}
+				leftSidebarOpen={professorsSidebarOpen}
+				leftSidebarOnClose={() => setProfessorsSidebarOpen(false)}
+				leftSidebarWidth={280}
+				rightSidebarContent={<CalendarAppCoursesSidebar />}
+				rightSidebarOpen={coursesSidebarOpen}
+				rightSidebarOnClose={() => setCoursesSidebarOpen(false)}
+				rightSidebarWidth={280}
 				scroll="content"
 			/>
 			{/* <EventDialog /> */}

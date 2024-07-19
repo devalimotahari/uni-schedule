@@ -7,7 +7,6 @@ import { useAppSelector } from 'app/store/hooks';
 import { MainLayoutConfigDefaultsType } from 'app/theme-layouts/mainLayout/MainLayoutConfig';
 import { lazy, memo, ReactNode, Suspense, useContext } from 'react';
 import { useRoutes } from 'react-router-dom';
-import NavbarWrapperMainLayout from './components/NavbarWrapperMainLayout';
 
 const FuseDialog = lazy(() => import('@fuse/core/FuseDialog/FuseDialog'));
 
@@ -47,7 +46,7 @@ function MainLayout(props: MainLayoutProps) {
 			className="flex w-full"
 		>
 			<div className="flex min-w-0 flex-auto">
-				<NavbarWrapperMainLayout />
+				{/* <NavbarWrapperMainLayout /> */}
 
 				<main
 					id="fuse-main"

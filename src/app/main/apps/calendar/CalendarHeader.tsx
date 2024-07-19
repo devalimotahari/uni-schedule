@@ -9,19 +9,19 @@ import FullCalendar from '@fullcalendar/react';
 import { DatesSetArg } from '@fullcalendar/core';
 import { MutableRefObject } from 'react';
 import { useSelector } from 'react-redux';
-import CalendarViewMenu from './CalendarViewMenu';
 
 type CalendarHeaderProps = {
 	calendarRef: MutableRefObject<FullCalendar | null>;
 	currentDate: DatesSetArg;
-	onToggleLeftSidebar: () => void;
+	onToggleCoursesSidebar: () => void;
+	onToggleProfessorsSidebar: () => void;
 };
 
 /**
  * The calendar header.
  */
 function CalendarHeader(props: CalendarHeaderProps) {
-	const { calendarRef, currentDate, onToggleLeftSidebar } = props;
+	const { calendarRef, currentDate, onToggleCoursesSidebar, onToggleProfessorsSidebar } = props;
 
 	const mainTheme = useSelector(selectMainTheme);
 	const calendarApi = () => calendarRef.current.getApi();
@@ -36,8 +36,8 @@ function CalendarHeader(props: CalendarHeaderProps) {
 			<div className="flex items-center justify-between">
 				<div className="flex items-center">
 					<IconButton
-						onClick={() => onToggleLeftSidebar()}
-						aria-label="open left sidebar"
+						onClick={() => onToggleProfessorsSidebar()}
+						aria-label="open right sidebar"
 						size="small"
 					>
 						<FuseSvgIcon>heroicons-outline:menu</FuseSvgIcon>
@@ -114,11 +114,13 @@ function CalendarHeader(props: CalendarHeaderProps) {
 				>
 					<FuseSvgIcon>heroicons-outline:plus-circle</FuseSvgIcon>
 				</IconButton>
-
-				<CalendarViewMenu
-					currentDate={currentDate}
-					onChange={handleViewChange}
-				/>
+				<IconButton
+					onClick={() => onToggleCoursesSidebar()}
+					aria-label="open left sidebar"
+					size="small"
+				>
+					<FuseSvgIcon>heroicons-outline:menu</FuseSvgIcon>
+				</IconButton>
 			</motion.div>
 		</div>
 	);
