@@ -23,19 +23,19 @@ export interface IAuthRegister {
 // calc
 
 export interface IProfessorData {
-	id: number;
+	id: string;
 	name: string;
 	pref_days: number[];
 	days: string[];
 }
 
 export interface ICourseData {
-	id: number;
+	id: string;
 	name: string;
 	units: number;
 	duration: string;
 	semister: number;
-	professors: number[];
+	professors: string[];
 }
 
 export interface ICalculateBody {

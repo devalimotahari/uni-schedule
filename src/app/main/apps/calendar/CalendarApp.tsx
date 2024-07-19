@@ -103,7 +103,7 @@ function CalendarApp() {
 	const [currentDate, setCurrentDate] = useState<DatesSetArg>();
 	const dispatch = useAppDispatch();
 	const isLoading = false;
-	const { events } = useCalendarStore();
+	const events = useCalendarStore((state) => state.events);
 	const calendarRef = useRef<FullCalendar>(null);
 	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 	const [professorsSidebarOpen, setProfessorsSidebarOpen] = useState(!isMobile);

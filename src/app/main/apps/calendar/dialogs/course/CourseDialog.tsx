@@ -29,6 +29,7 @@ const schema = z.object({
 		.number({ required_error: 'لطفا تعداد واحد را وارد نمایید.' })
 		.min(1, 'حداقل واحد 1 می باشد')
 		.max(4, 'حداکثر واحد 4 می باشد'),
+	duration: z.string({ required_error: 'لطفا مدت زمان را وارد نمایید.' }).min(1, 'لطفا مدت زمان را وارد نمایید.'),
 	professors: z.array(z.string())
 });
 
@@ -44,6 +45,7 @@ function CourseDialog({ initialData }: IProps) {
 			name: initialData?.name,
 			unit: initialData?.unit ?? 2,
 			semester: initialData?.semester?.toString() ?? '1',
+			duration: initialData?.duration ?? '',
 			professors: initialData?.professors ?? []
 		},
 		resolver: zodResolver(schema)
@@ -74,6 +76,7 @@ function CourseDialog({ initialData }: IProps) {
 				...values,
 				name: values.name ?? '',
 				unit: values.unit ?? 2,
+				duration: values.duration ?? '',
 				professors: values.professors ?? [],
 				semester: +values.semester
 			});
@@ -114,6 +117,21 @@ function CourseDialog({ initialData }: IProps) {
 								fullWidth
 								size="small"
 								label="تعداد واحد"
+								error={!!fieldState.error}
+								helperText={fieldState.error?.message}
+							/>
+						)}
+					/>
+					<Controller
+						control={control}
+						name="duration"
+						render={({ field, fieldState }) => (
+							<TextField
+								{...field}
+								fullWidth
+								size="small"
+								type="time"
+								label="مدت زمان"
 								error={!!fieldState.error}
 								helperText={fieldState.error?.message}
 							/>

@@ -38,6 +38,7 @@ export interface ICourse {
 	id: string;
 	name: string;
 	unit: number;
+	duration: string;
 	semester: number;
 	professors: Array<IProfessor['id']>;
 }
