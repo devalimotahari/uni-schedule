@@ -1,6 +1,7 @@
-import { cloneDeep, uniqueId } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { uuidv4 } from './utils';
 
 export interface ILabel {
 	id: string;
@@ -69,18 +70,10 @@ export const useCalendarStore = create<ICalendarStore>()(
 				toggleSelectedLabels: () => {},
 
 				professors: [],
-				courses: [
-					{
-						id: uniqueId(),
-						name: 'test1',
-						unit: 2,
-						semester: 1,
-						professors: ['123']
-					}
-				],
+				courses: [],
 
 				addProfessor: (professor) =>
-					set((state) => ({ professors: [...state.professors, { id: uniqueId(), ...professor }] })),
+					set((state) => ({ professors: [...state.professors, { id: uuidv4(), ...professor }] })),
 				editProfessor: (professorId, data) =>
 					set((state) => {
 						const copy = cloneDeep(state.professors);
@@ -100,7 +93,7 @@ export const useCalendarStore = create<ICalendarStore>()(
 				deleteProfessor: (professorId) =>
 					set((state) => ({ professors: state.professors.filter((p) => p.id !== professorId) })),
 
-				addCourse: (course) => set((state) => ({ courses: [...state.courses, { id: uniqueId(), ...course }] })),
+				addCourse: (course) => set((state) => ({ courses: [...state.courses, { id: uuidv4(), ...course }] })),
 				editCourse: (courseId, data) =>
 					set((state) => {
 						const copy = cloneDeep(state.courses);

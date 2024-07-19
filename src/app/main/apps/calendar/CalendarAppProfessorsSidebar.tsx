@@ -105,12 +105,14 @@ function CalendarAppProfessorsSidebar() {
 							<>
 								<IconButton
 									onClick={() => openDeleteDialog(prof)}
+									edge="start"
 									aria-label="delete"
 								>
 									<FuseSvgIcon size={20}>heroicons-outline:trash</FuseSvgIcon>
 								</IconButton>
 								<IconButton
 									onClick={() => openFormDialog(prof)}
+									edge="end"
 									aria-label="edit"
 								>
 									<FuseSvgIcon size={20}>heroicons-outline:pencil</FuseSvgIcon>
@@ -123,7 +125,16 @@ function CalendarAppProfessorsSidebar() {
 							primaryTypographyProps={{
 								variant: 'subtitle2'
 							}}
-							secondary={prof.days.map((d) => `${getDayText(d.day)}`).join('، ')}
+							secondary={prof.days
+								.reduce((acc, day) => {
+									if (!acc.includes(day.day)) {
+										acc.push(day.day);
+									}
+
+									return acc;
+								}, [] as Array<number>)
+								.map((d) => getDayText(d))
+								.join(', ')}
 							secondaryTypographyProps={{
 								variant: 'caption'
 							}}

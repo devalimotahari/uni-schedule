@@ -84,6 +84,7 @@ function ProfessorDialog({ initialData }: IProps) {
 							<TextField
 								{...field}
 								fullWidth
+								autoFocus
 								size="small"
 								label="نام و نام خانوادگی"
 								error={!!fieldState.error}
