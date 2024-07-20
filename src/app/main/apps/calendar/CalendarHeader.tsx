@@ -45,7 +45,9 @@ function CalendarHeader(props: CalendarHeaderProps) {
 				professors: professors.map((prof) => ({
 					id: prof.id,
 					name: prof.name,
-					days: prof.days.map((d) => `${d.day}:${d.startTime.replace(/:/g, '')}:${d.endTime.replace(/:/g, '')}`),
+					days: prof.days.map(
+						(d) => `${d.day}:${d.startTime.replace(/:/g, '')}:${d.endTime.replace(/:/g, '')}`
+					),
 					pref_days: prof.preferDays
 				})),
 				courses: courses.map((course) => ({
