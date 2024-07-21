@@ -5,3 +5,22 @@ export const uuidv4 = () =>
 		// eslint-disable-next-line
 		(+c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (+c / 4)))).toString(16)
 	);
+
+export const parseDateToTimeFormat = (date: Date | null): string => {
+	if (date === null) return '';
+
+	const hours = date.getHours();
+	const minutes = date.getMinutes();
+
+	return `${hours}:${minutes}`;
+};
+export const parseTimeFormatToDate = (time: string | null): Date | null => {
+	if (time == null) return null;
+
+	const [hours, minutes] = time.split(':');
+	const date = new Date();
+	date.setHours(hours);
+	date.setMinutes(minutes);
+
+	return date;
+};

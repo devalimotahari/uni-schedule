@@ -41,7 +41,7 @@ function ProfessorDialog({ initialData }: IProps) {
 		defaultValues: {
 			name: initialData?.name,
 			preferDays: initialData?.preferDays ?? [],
-			days: initialData?.days ?? [{ day: 0, startTime: '', endTime: '' }]
+			days: initialData?.days ?? [{ day: 0, startTime: null, endTime: null }]
 		},
 		resolver: zodResolver(schema)
 	});

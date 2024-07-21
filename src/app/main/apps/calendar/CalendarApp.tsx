@@ -6,7 +6,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
-import { useAppDispatch } from 'app/store/hooks';
 import {
 	DateSelectArg,
 	DatesSetArg,
@@ -17,7 +16,6 @@ import {
 	EventDropArg,
 	EventRemoveArg
 } from '@fullcalendar/core';
-import FuseLoading from '@fuse/core/FuseLoading';
 import CalendarAppCoursesSidebar from './CalendarAppCoursesSidebar';
 import CalendarHeader from './CalendarHeader';
 import CalendarAppProfessorsSidebar from './CalendarAppProfessorsSidebar';
@@ -101,8 +99,6 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
  */
 function CalendarApp() {
 	const [currentDate, setCurrentDate] = useState<DatesSetArg>();
-	const dispatch = useAppDispatch();
-	const isLoading = false;
 	const events = useCalendarStore((state) => state.events);
 	const calendarRef = useRef<FullCalendar>(null);
 	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
@@ -171,61 +167,54 @@ function CalendarApp() {
 		setProfessorsSidebarOpen(!professorsSidebarOpen);
 	}
 
-	if (isLoading) {
-		return <FuseLoading />;
-	}
-
 	return (
-		<>
-			<Root
-				header={
-					<CalendarHeader
-						calendarRef={calendarRef}
-						currentDate={currentDate}
-						onToggleCoursesSidebar={handleToggleCoursesSidebar}
-						onToggleProfessorsSidebar={handleToggleProfessorsSidebar}
-					/>
-				}
-				content={
-					<FullCalendar
-						plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-						headerToolbar={false}
-						initialView="timeGridWeek"
-						locale="fa"
-						allDayText="ساعت"
-						editable
-						direction={theme.direction}
-						selectable
-						selectMirror
-						dayMaxEvents
-						weekends
-						datesSet={handleDates}
-						select={handleDateSelect}
-						events={events}
-						// eslint-disable-next-line react/no-unstable-nested-components
-						eventContent={(eventInfo: EventContentArg & { event: Event }) => (
-							<CalendarAppEventContent eventInfo={eventInfo} />
-						)}
-						eventClick={handleEventClick}
-						eventAdd={handleEventAdd}
-						eventChange={handleEventChange}
-						eventRemove={handleEventRemove}
-						eventDrop={handleEventDrop}
-						ref={calendarRef}
-					/>
-				}
-				leftSidebarContent={<CalendarAppProfessorsSidebar />}
-				leftSidebarOpen={professorsSidebarOpen}
-				leftSidebarOnClose={() => setProfessorsSidebarOpen(false)}
-				leftSidebarWidth={280}
-				rightSidebarContent={<CalendarAppCoursesSidebar />}
-				rightSidebarOpen={coursesSidebarOpen}
-				rightSidebarOnClose={() => setCoursesSidebarOpen(false)}
-				rightSidebarWidth={280}
-				scroll="content"
-			/>
-			{/* <EventDialog /> */}
-		</>
+		<Root
+			header={
+				<CalendarHeader
+					calendarRef={calendarRef}
+					currentDate={currentDate}
+					onToggleCoursesSidebar={handleToggleCoursesSidebar}
+					onToggleProfessorsSidebar={handleToggleProfessorsSidebar}
+				/>
+			}
+			content={
+				<FullCalendar
+					plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+					headerToolbar={false}
+					initialView="timeGridWeek"
+					locale="fa"
+					allDayText="ساعت"
+					editable
+					direction={theme.direction}
+					selectable
+					selectMirror
+					dayMaxEvents
+					weekends
+					datesSet={handleDates}
+					select={handleDateSelect}
+					events={events}
+					// eslint-disable-next-line react/no-unstable-nested-components
+					eventContent={(eventInfo: EventContentArg & { event: Event }) => (
+						<CalendarAppEventContent eventInfo={eventInfo} />
+					)}
+					eventClick={handleEventClick}
+					eventAdd={handleEventAdd}
+					eventChange={handleEventChange}
+					eventRemove={handleEventRemove}
+					eventDrop={handleEventDrop}
+					ref={calendarRef}
+				/>
+			}
+			leftSidebarContent={<CalendarAppProfessorsSidebar />}
+			leftSidebarOpen={professorsSidebarOpen}
+			leftSidebarOnClose={() => setProfessorsSidebarOpen(false)}
+			leftSidebarWidth={280}
+			rightSidebarContent={<CalendarAppCoursesSidebar />}
+			rightSidebarOpen={coursesSidebarOpen}
+			rightSidebarOnClose={() => setCoursesSidebarOpen(false)}
+			rightSidebarWidth={280}
+			scroll="content"
+		/>
 	);
 }
 

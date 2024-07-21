@@ -7,14 +7,31 @@ import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
-import { Control, Controller, useFieldArray } from 'react-hook-form';
+import { MobileTimePicker } from '@mui/x-date-pickers';
+import { Control, Controller, ControllerFieldState, useFieldArray } from 'react-hook-form';
 import { IProfessor } from '../../calendarStore';
-import { weekDays } from '../../utils';
+import { parseDateToTimeFormat, parseTimeFormatToDate, weekDays } from '../../utils';
 
 interface IProps {
 	formControl: Control;
 }
+
+const commonTimePickerProps = (fieldState: ControllerFieldState) => ({
+	ampm: false,
+	slotProps: {
+		layout: {
+			className: 'ltr'
+		},
+		toolbar: {
+			className: 'ltr'
+		},
+		textField: {
+			fullWidth: true,
+			size: 'small',
+			error: !!fieldState.error
+		}
+	}
+});
 
 function ProfessorDaysForm({ formControl }: IProps) {
 	const { fields, append, remove } = useFieldArray({
@@ -61,14 +78,12 @@ function ProfessorDaysForm({ formControl }: IProps) {
 						control={formControl}
 						name={`days.${i}.startTime`}
 						render={({ field, fieldState }) => (
-							<TextField
+							<MobileTimePicker
 								{...field}
-								fullWidth
-								type="time"
-								size="small"
-								InputLabelProps={{ shrink: true }}
+								{...commonTimePickerProps(fieldState)}
+								value={parseTimeFormatToDate(field.value as string)}
+								onChange={(value) => field.onChange(parseDateToTimeFormat(value))}
 								label="ساعت شروع"
-								error={!!fieldState.error}
 							/>
 						)}
 					/>
@@ -76,14 +91,12 @@ function ProfessorDaysForm({ formControl }: IProps) {
 						control={formControl}
 						name={`days.${i}.endTime`}
 						render={({ field, fieldState }) => (
-							<TextField
+							<MobileTimePicker
 								{...field}
-								fullWidth
-								type="time"
-								size="small"
-								InputLabelProps={{ shrink: true }}
+								{...commonTimePickerProps(fieldState)}
+								value={parseTimeFormatToDate(field.value as string)}
+								onChange={(value) => field.onChange(parseDateToTimeFormat(value))}
 								label="ساعت پایان"
-								error={!!fieldState.error}
 							/>
 						)}
 					/>
