@@ -13,6 +13,7 @@ import { useAppDispatch } from 'app/store/hooks';
 import { motion } from 'framer-motion';
 import { ICourse, useCalendarStore } from './calendarStore';
 import CourseDialog from './dialogs/course/CourseDialog';
+import { getRandomColor } from './utils';
 
 /**
  * The calendar app sidebar.
@@ -95,17 +96,24 @@ function CalendarAppCoursesSidebar() {
 				{courses?.map((course) => (
 					<ListItem
 						divider
+						sx={(theme) => ({
+							backgroundColor: getRandomColor(course.id),
+							color: theme.palette.getContrastText(getRandomColor(course.id))
+						})}
+						className="rounded-md"
 						key={course.id}
 						secondaryAction={
 							<>
 								<IconButton
 									onClick={() => openDeleteDialog(course)}
+									color="inherit"
 									aria-label="delete"
 								>
 									<FuseSvgIcon size={20}>heroicons-outline:trash</FuseSvgIcon>
 								</IconButton>
 								<IconButton
 									onClick={() => openFormDialog(course)}
+									color="inherit"
 									aria-label="edit"
 								>
 									<FuseSvgIcon size={20}>heroicons-outline:pencil</FuseSvgIcon>
@@ -122,11 +130,13 @@ function CalendarAppCoursesSidebar() {
 								واحد: 
 								${course.unit}
 								 -
-								 نیمسال:
+								 ترم:
 								${course.semester}
 							`}
 							secondaryTypographyProps={{
-								variant: 'caption'
+								className: 'opacity-80',
+								color: 'inherit',
+								fontSize: 12
 							}}
 						/>
 					</ListItem>

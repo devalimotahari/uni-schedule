@@ -7,25 +7,24 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import { MobileTimePicker } from '@mui/x-date-pickers';
 import { useAppDispatch } from 'app/store/hooks';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ICourse, useCalendarStore } from '../../calendarStore';
+import { commonTimePickerProps, parseDateToTimeFormat, parseTimeFormatToDate } from '../../utils';
 
 const schema = z.object({
 	name: z.string({ required_error: 'لطفا عنوان درس را وارد نمایید' }).min(1, 'لطفا عنوان درس را وارد نمایید'),
-	semester: z
-		.string({ required_error: 'لطفا وضعیت نیمسال را وارد نمایید.' })
-		.min(1, 'لطفا وضعیت نیمسال را وارد نمایید.'),
-	unit: z
+	semester: z.coerce
+		.number({ required_error: 'لطفا شماره ترم را وارد نمایید.' })
+		.min(1, 'حداقل شماره ترم 1 می باشد.')
+		.max(8, 'حداکثر شماره ترم 8 می باشد.'),
+	unit: z.coerce
 		.number({ required_error: 'لطفا تعداد واحد را وارد نمایید.' })
 		.min(1, 'حداقل واحد 1 می باشد')
 		.max(4, 'حداکثر واحد 4 می باشد'),
@@ -44,7 +43,7 @@ function CourseDialog({ initialData }: IProps) {
 		defaultValues: {
 			name: initialData?.name,
 			unit: initialData?.unit ?? 2,
-			semester: initialData?.semester?.toString() ?? '1',
+			semester: initialData?.semester ?? 1,
 			duration: initialData?.duration ?? '',
 			professors: initialData?.professors ?? []
 		},
@@ -78,7 +77,7 @@ function CourseDialog({ initialData }: IProps) {
 				unit: values.unit ?? 2,
 				duration: values.duration ?? '',
 				professors: values.professors ?? [],
-				semester: +values.semester
+				semester: values.semester
 			});
 		}
 
@@ -111,10 +110,12 @@ function CourseDialog({ initialData }: IProps) {
 					<Controller
 						control={control}
 						name="unit"
+						rules={{ valueAsNumber: true }}
 						render={({ field, fieldState }) => (
 							<TextField
 								{...field}
 								fullWidth
+								type="number"
 								size="small"
 								label="تعداد واحد"
 								error={!!fieldState.error}
@@ -126,42 +127,29 @@ function CourseDialog({ initialData }: IProps) {
 						control={control}
 						name="duration"
 						render={({ field, fieldState }) => (
-							<TextField
+							<MobileTimePicker
 								{...field}
-								fullWidth
-								size="small"
-								type="time"
+								{...commonTimePickerProps(fieldState)}
+								value={parseTimeFormatToDate(field.value)}
+								onChange={(value) => field.onChange(parseDateToTimeFormat(value))}
 								label="مدت زمان"
-								error={!!fieldState.error}
-								helperText={fieldState.error?.message}
 							/>
 						)}
 					/>
 					<Controller
 						control={control}
 						name="semester"
+						rules={{ valueAsNumber: true }}
 						render={({ field, fieldState }) => (
-							<FormControl>
-								<FormLabel id="semester-label">نیمسال</FormLabel>
-								<RadioGroup
-									{...field}
-									aria-labelledby="semester-label"
-									defaultValue={1}
-									className="flex flex-row gap-10"
-								>
-									<FormControlLabel
-										value={1}
-										control={<Radio />}
-										label="اول"
-									/>
-									<FormControlLabel
-										value={2}
-										control={<Radio />}
-										label="دوم"
-									/>
-								</RadioGroup>
-								<FormHelperText error={!!fieldState.error}>{fieldState.error?.message}</FormHelperText>
-							</FormControl>
+							<TextField
+								{...field}
+								fullWidth
+								type="number"
+								size="small"
+								label="شماره ترم"
+								error={!!fieldState.error}
+								helperText={fieldState.error?.message}
+							/>
 						)}
 					/>
 					<Controller

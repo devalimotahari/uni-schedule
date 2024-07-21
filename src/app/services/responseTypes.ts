@@ -9,20 +9,21 @@ export interface IAuthLoginResponse {
 // calc
 interface ICourseResult {
 	day: number;
-	duration: string;
 	end: string;
-	id: number;
+	id: string;
 	is_prefered_time: boolean;
-	name: string;
-	professor_id: number;
-	semister: number;
+	professor_id: string;
 	start: string;
-	units: number;
+}
+
+export interface ICalculateResponseResult {
+	courses: ICourseResult[];
+	score: number;
 }
 
 export interface ICalculateResponse {
 	data: {
-		resualts: Array<Array<ICourseResult>>;
+		resualts: ICalculateResponseResult[];
 	};
 	message: string;
 }

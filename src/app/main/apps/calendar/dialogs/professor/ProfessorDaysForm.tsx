@@ -8,30 +8,13 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { MobileTimePicker } from '@mui/x-date-pickers';
-import { Control, Controller, ControllerFieldState, useFieldArray } from 'react-hook-form';
+import { Control, Controller, useFieldArray } from 'react-hook-form';
 import { IProfessor } from '../../calendarStore';
-import { parseDateToTimeFormat, parseTimeFormatToDate, weekDays } from '../../utils';
+import { commonTimePickerProps, parseDateToTimeFormat, parseTimeFormatToDate, weekDays } from '../../utils';
 
 interface IProps {
 	formControl: Control;
 }
-
-const commonTimePickerProps = (fieldState: ControllerFieldState) => ({
-	ampm: false,
-	slotProps: {
-		layout: {
-			className: 'ltr'
-		},
-		toolbar: {
-			className: 'ltr'
-		},
-		textField: {
-			fullWidth: true,
-			size: 'small',
-			error: !!fieldState.error
-		}
-	}
-});
 
 function ProfessorDaysForm({ formControl }: IProps) {
 	const { fields, append, remove } = useFieldArray({

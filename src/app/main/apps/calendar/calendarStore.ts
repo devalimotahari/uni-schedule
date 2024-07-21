@@ -1,3 +1,4 @@
+import { ICalculateResponseResult } from 'app/services/responseTypes';
 import { cloneDeep } from 'lodash';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
@@ -43,6 +44,8 @@ export interface ICourse {
 	professors: Array<IProfessor['id']>;
 }
 
+type ResultType = ICalculateResponseResult & { id: string };
+
 interface ICalendarStore {
 	labels: ILabel[];
 	events: IEvent[];
@@ -51,6 +54,11 @@ interface ICalendarStore {
 
 	professors: Array<IProfessor>;
 	courses: Array<ICourse>;
+
+	results: Array<ResultType>;
+	selectedResultIndex: number | null;
+	setSelectedResultIndex: (index: number) => void;
+	setResults: (data: Array<ResultType>) => void;
 
 	addProfessor: (professor: Omit<IProfessor, 'id'>) => void;
 	editProfessor: (professorId: IProfessor['id'], data: Partial<IProfessor>) => void;
@@ -72,6 +80,11 @@ export const useCalendarStore = create<ICalendarStore>()(
 
 				professors: [],
 				courses: [],
+
+				results: [],
+				selectedResultIndex: null,
+				setSelectedResultIndex: (index) => set(() => ({ selectedResultIndex: index })),
+				setResults: (results) => set(() => ({ results })),
 
 				addProfessor: (professor) =>
 					set((state) => ({ professors: [...state.professors, { id: uuidv4(), ...professor }] })),

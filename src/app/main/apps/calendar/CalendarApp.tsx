@@ -6,21 +6,13 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
-import {
-	DateSelectArg,
-	DatesSetArg,
-	EventAddArg,
-	EventChangeArg,
-	EventClickArg,
-	EventContentArg,
-	EventDropArg,
-	EventRemoveArg
-} from '@fullcalendar/core';
+import { EventContentArg } from '@fullcalendar/core';
 import CalendarAppCoursesSidebar from './CalendarAppCoursesSidebar';
 import CalendarHeader from './CalendarHeader';
 import CalendarAppProfessorsSidebar from './CalendarAppProfessorsSidebar';
 import CalendarAppEventContent from './CalendarAppEventContent';
-import { useCalendarStore } from './calendarStore';
+import { IEvent, useCalendarStore } from './calendarStore';
+import { convertResultCourseToEvent } from './utils';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& a': {
@@ -98,8 +90,12 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
  * The calendar app.
  */
 function CalendarApp() {
-	const [currentDate, setCurrentDate] = useState<DatesSetArg>();
-	const events = useCalendarStore((state) => state.events);
+	const [events, results, selectedResultIndex] = useCalendarStore((state) => [
+		state.events,
+		state.results,
+		state.selectedResultIndex
+	]);
+	const resultCourses = results[selectedResultIndex ?? 0]?.courses ?? [];
 	const calendarRef = useRef<FullCalendar>(null);
 	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 	const [professorsSidebarOpen, setProfessorsSidebarOpen] = useState(!isMobile);
@@ -116,48 +112,7 @@ function CalendarApp() {
 		setTimeout(() => {
 			calendarRef.current?.getApi()?.updateSize();
 		}, 300);
-	}, [professorsSidebarOpen]);
-
-	const handleDateSelect = (selectInfo: DateSelectArg) => {
-		// dispatch(openNewEventDialog(selectInfo));
-	};
-
-	const handleEventDrop = (eventDropInfo: EventDropArg): void => {
-		const { id, title, allDay, start, end, extendedProps } = eventDropInfo.event;
-		/* updateEvent({
-			id,
-			title,
-			allDay,
-			start: start?.toISOString() ?? '',
-			end: end?.toISOString() ?? '',
-			extendedProps
-		}); */
-	};
-
-	const handleEventClick = (clickInfo: EventClickArg) => {
-		clickInfo.jsEvent.preventDefault();
-		// dispatch(openEditEventDialog(clickInfo));
-	};
-
-	const handleDates = (rangeInfo: DatesSetArg) => {
-		setCurrentDate(rangeInfo);
-	};
-
-	const handleEventAdd = (addInfo: EventAddArg) => {
-		// eslint-disable-next-line no-console
-		console.log(calendarRef.current.getApi().view);
-		console.info(addInfo);
-	};
-
-	const handleEventChange = (changeInfo: EventChangeArg) => {
-		// eslint-disable-next-line no-console
-		console.info(changeInfo);
-	};
-
-	const handleEventRemove = (removeInfo: EventRemoveArg) => {
-		// eslint-disable-next-line no-console
-		console.info(removeInfo);
-	};
+	}, [professorsSidebarOpen, coursesSidebarOpen]);
 
 	function handleToggleCoursesSidebar() {
 		setCoursesSidebarOpen(!coursesSidebarOpen);
@@ -167,12 +122,12 @@ function CalendarApp() {
 		setProfessorsSidebarOpen(!professorsSidebarOpen);
 	}
 
+	console.log({ resultCourses, aa: resultCourses.map(convertResultCourseToEvent) });
+
 	return (
 		<Root
 			header={
 				<CalendarHeader
-					calendarRef={calendarRef}
-					currentDate={currentDate}
 					onToggleCoursesSidebar={handleToggleCoursesSidebar}
 					onToggleProfessorsSidebar={handleToggleProfessorsSidebar}
 				/>
@@ -184,24 +139,14 @@ function CalendarApp() {
 					initialView="timeGridWeek"
 					locale="fa"
 					allDayText="ساعت"
-					editable
 					direction={theme.direction}
-					selectable
-					selectMirror
 					dayMaxEvents
 					weekends
-					datesSet={handleDates}
-					select={handleDateSelect}
-					events={events}
+					events={resultCourses.map(convertResultCourseToEvent)}
 					// eslint-disable-next-line react/no-unstable-nested-components
-					eventContent={(eventInfo: EventContentArg & { event: Event }) => (
+					eventContent={(eventInfo: EventContentArg & { event: IEvent }) => (
 						<CalendarAppEventContent eventInfo={eventInfo} />
 					)}
-					eventClick={handleEventClick}
-					eventAdd={handleEventAdd}
-					eventChange={handleEventChange}
-					eventRemove={handleEventRemove}
-					eventDrop={handleEventDrop}
 					ref={calendarRef}
 				/>
 			}

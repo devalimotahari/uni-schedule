@@ -1,21 +1,15 @@
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import { Autocomplete } from '@mui/material';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
-import { selectMainTheme } from '@fuse/core/FuseSettings/fuseSettingsSlice';
+import TextField from '@mui/material/TextField';
 import { useMutation } from '@tanstack/react-query';
 import { PostCalculate } from 'app/services/apiShortRequests';
 import { motion } from 'framer-motion';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import FullCalendar from '@fullcalendar/react';
-import { DatesSetArg } from '@fullcalendar/core';
-import { MutableRefObject } from 'react';
-import { useSelector } from 'react-redux';
 import { useCalendarStore } from './calendarStore';
+import { uuidv4 } from './utils';
 
 type CalendarHeaderProps = {
-	calendarRef: MutableRefObject<FullCalendar | null>;
-	currentDate: DatesSetArg;
 	onToggleCoursesSidebar: () => void;
 	onToggleProfessorsSidebar: () => void;
 };
@@ -24,17 +18,28 @@ type CalendarHeaderProps = {
  * The calendar header.
  */
 function CalendarHeader(props: CalendarHeaderProps) {
-	const { calendarRef, currentDate, onToggleCoursesSidebar, onToggleProfessorsSidebar } = props;
+	const { onToggleCoursesSidebar, onToggleProfessorsSidebar } = props;
 
-	const mainTheme = useSelector(selectMainTheme);
-	const calendarApi = () => calendarRef.current.getApi();
-
-	const [professors, courses] = useCalendarStore((state) => [state.professors, state.courses]);
+	const [professors, courses, results, selectedResultIndex, setResults, setSelectedResultIndex] = useCalendarStore(
+		(state) => [
+			state.professors,
+			state.courses,
+			state.results,
+			state.selectedResultIndex,
+			state.setResults,
+			state.setSelectedResultIndex
+		]
+	);
 
 	const { mutate: calculateMutate, isPending } = useMutation({
 		mutationFn: PostCalculate,
 		onSuccess: (res) => {
-			console.log({ res });
+			if (res.data?.data?.resualts && res.data.data.resualts.length > 0) {
+				setResults(
+					res.data.data.resualts.map((item) => ({ ...item, id: uuidv4() })).sort((a, b) => a.score - b.score)
+				);
+				setSelectedResultIndex(0);
+			}
 		}
 	});
 
@@ -64,7 +69,7 @@ function CalendarHeader(props: CalendarHeaderProps) {
 
 	return (
 		<div className="flex flex-col md:flex-row w-full p-12 justify-between z-10 container">
-			<div className="flex items-center justify-between">
+			<div className="flex items-center justify-between gap-16">
 				<div className="flex items-center">
 					<IconButton
 						onClick={() => onToggleProfessorsSidebar()}
@@ -73,55 +78,8 @@ function CalendarHeader(props: CalendarHeaderProps) {
 					>
 						<FuseSvgIcon>heroicons-outline:menu</FuseSvgIcon>
 					</IconButton>
-
-					<Typography className="hidden sm:flex text-2xl font-semibold tracking-tight whitespace-nowrap mx-16">
-						{currentDate?.view.title}
-					</Typography>
 				</div>
 
-				<div className="flex items-center">
-					<Tooltip title="Previous">
-						<IconButton
-							aria-label="Previous"
-							onClick={() => calendarApi().prev()}
-						>
-							<FuseSvgIcon size={20}>
-								{mainTheme.direction === 'ltr'
-									? 'heroicons-solid:chevron-left'
-									: 'heroicons-solid:chevron-right'}
-							</FuseSvgIcon>
-						</IconButton>
-					</Tooltip>
-					<Tooltip title="Next">
-						<IconButton
-							aria-label="Next"
-							onClick={() => calendarApi().next()}
-						>
-							<FuseSvgIcon size={20}>
-								{mainTheme.direction === 'ltr'
-									? 'heroicons-solid:chevron-right'
-									: 'heroicons-solid:chevron-left'}
-							</FuseSvgIcon>
-						</IconButton>
-					</Tooltip>
-
-					<Tooltip title="Today">
-						<div>
-							<motion.div
-								initial={{ scale: 0 }}
-								animate={{ scale: 1, transition: { delay: 0.3 } }}
-							>
-								<IconButton
-									aria-label="today"
-									onClick={() => calendarApi().today()}
-									size="large"
-								>
-									<FuseSvgIcon>heroicons-outline:calendar</FuseSvgIcon>
-								</IconButton>
-							</motion.div>
-						</div>
-					</Tooltip>
-				</div>
 				<Button
 					onClick={sendDataToCalculate}
 					disabled={professors.length === 0 || courses.length === 0 || isPending}
@@ -134,10 +92,34 @@ function CalendarHeader(props: CalendarHeaderProps) {
 			</div>
 
 			<motion.div
-				className="flex items-center justify-end md:justify-center"
+				className="flex items-center justify-end md:justify-center gap-16"
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1, transition: { delay: 0.3 } }}
 			>
+				{results.length > 0 && (
+					<Autocomplete
+						options={results}
+						loading={isPending}
+						fullWidth
+						className="min-w-sm"
+						getOptionLabel={(o) => `برنامه با امتیاز ${o.score} (شناسه: ${o.id})`}
+						value={results[selectedResultIndex ?? 0] ?? null}
+						onChange={(event, value) => {
+							const foundIndex = results.findIndex((item) => item.id === value?.id);
+
+							if (foundIndex !== -1) {
+								setSelectedResultIndex(foundIndex);
+							}
+						}}
+						renderInput={(params) => (
+							<TextField
+								{...params}
+								size="small"
+								label="انتخاب برنامه پردازش شده"
+							/>
+						)}
+					/>
+				)}
 				<IconButton
 					onClick={() => onToggleCoursesSidebar()}
 					aria-label="open left sidebar"

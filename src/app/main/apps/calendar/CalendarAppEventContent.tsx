@@ -1,10 +1,8 @@
 import { useTheme } from '@mui/material/styles';
-import _ from '@lodash';
 import Box from '@mui/material/Box';
 import clsx from 'clsx';
 import Typography from '@mui/material/Typography';
 import { EventContentArg } from '@fullcalendar/core';
-import { useCalendarStore } from './calendarStore';
 
 type CalendarAppEventContentProps = {
 	eventInfo: EventContentArg & { event: Event };
@@ -16,21 +14,25 @@ type CalendarAppEventContentProps = {
 function CalendarAppEventContent(props: CalendarAppEventContentProps) {
 	const { eventInfo } = props;
 	const theme = useTheme();
-	const { labels } = useCalendarStore();
-
-	const labelId = eventInfo.event.extendedProps.label as string;
-	const label = _.find(labels, { id: labelId });
 
 	return (
 		<Box
 			sx={{
-				backgroundColor: label?.color,
-				color: label && theme.palette.getContrastText(label?.color)
+				backgroundColor: eventInfo.event.backgroundColor,
+				color: theme.palette.getContrastText(eventInfo.event.backgroundColor)
 			}}
-			className={clsx('flex items-center w-full rounded-4 px-8 py-2 h-22 text-white')}
+			className={clsx('flex flex-col items-center w-full rounded-4 px-8 py-2 h-22 text-white')}
 		>
-			<Typography className="text-12 font-semibold">{eventInfo.timeText}</Typography>
-			<Typography className="text-12 px-4 truncate">{eventInfo.event.title}</Typography>
+			<Box className="flex items-center w-full gap-8">
+				<Typography className="text-12 font-semibold">{eventInfo.timeText}</Typography>
+				<Typography className="text-12 px-4 truncate">{eventInfo.event.title}</Typography>
+			</Box>
+			<Typography
+				variant="caption"
+				className="w-full"
+			>
+				{eventInfo.event.extendedProps.desc}
+			</Typography>
 		</Box>
 	);
 }
