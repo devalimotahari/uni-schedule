@@ -67,13 +67,13 @@ export const commonTimePickerProps = (fieldState: ControllerFieldState) => ({
 });
 
 const dayNumToJalaliDayNum = {
-	0: 1,
-	1: 2,
-	2: 3,
-	3: 4,
-	4: 5,
-	5: 6,
-	6: 0
+	0: 6,
+	1: 0,
+	2: 1,
+	3: 2,
+	4: 3,
+	5: 4,
+	6: 5
 };
 
 export const convertResultCourseToEvent = (item: ICalculateResponseResult['courses'][number]): IEvent => {
@@ -83,23 +83,19 @@ export const convertResultCourseToEvent = (item: ICalculateResponseResult['cours
 
 	const startDate = new Date();
 
-	const currentDay = startDate.getDay();
+	const currentDay = startDate.getDay() - 2;
 	const distance = dayNumToJalaliDayNum[item.day] - currentDay;
 
 	startDate.setDate(startDate.getDate() + distance);
-	startDate.setHours(item.start.substring(0, 2));
-	startDate.setMinutes(item.start.substring(2));
 
 	const endDate = new Date();
 	endDate.setDate(endDate.getDate() + distance);
-	endDate.setHours(item.end.substring(0, 2));
-	endDate.setMinutes(item.end.substring(2));
 
 	return {
 		id: uuidv4(),
 		title: `${course.name} - ${professor.name}`,
-		start: startDate.toISOString().replace(/\..*$/g, ''),
-		end: endDate.toISOString().replace(/\..*$/g, ''),
+		start: `${startDate.toISOString().replace(/T.*$/, '')}T${item.start.substring(0, 2)}:${item.start.substring(2)}:00`,
+		end: `${endDate.toISOString().replace(/T.*$/, '')}T${item.end.substring(0, 2)}:${item.end.substring(2)}:00`,
 		allDay: false,
 		backgroundColor: getRandomColor(course.id),
 		extendedProps: {

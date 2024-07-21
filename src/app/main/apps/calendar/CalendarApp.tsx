@@ -12,7 +12,7 @@ import CalendarHeader from './CalendarHeader';
 import CalendarAppProfessorsSidebar from './CalendarAppProfessorsSidebar';
 import CalendarAppEventContent from './CalendarAppEventContent';
 import { IEvent, useCalendarStore } from './calendarStore';
-import { convertResultCourseToEvent } from './utils';
+import { convertResultCourseToEvent, weekDays } from './utils';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& a': {
@@ -138,6 +138,9 @@ function CalendarApp() {
 					headerToolbar={false}
 					initialView="timeGridWeek"
 					locale="fa"
+					dayHeaderFormat={(arg) => {
+						return weekDays[new Date(arg.date.year, arg.date.month, arg.date.day).getDay()];
+					}}
 					allDayText="ساعت"
 					direction={theme.direction}
 					dayMaxEvents
