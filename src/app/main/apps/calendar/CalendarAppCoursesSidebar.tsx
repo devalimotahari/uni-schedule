@@ -11,15 +11,20 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { useAppDispatch } from 'app/store/hooks';
 import { motion } from 'framer-motion';
+import { groupBy } from 'lodash';
+import { Fragment } from 'react';
+import { Typography, Divider } from '@mui/material';
 import { ICourse, useCalendarStore } from './calendarStore';
 import CourseDialog from './dialogs/course/CourseDialog';
-import { getRandomColor } from './utils';
+import { semisterColors } from './utils';
 
 /**
  * The calendar app sidebar.
  */
 function CalendarAppCoursesSidebar() {
 	const [courses, deleteCourse] = useCalendarStore((state) => [state.courses, state.deleteCourse]);
+	const sortedCourses = courses?.sort((a, b) => a.semester - b.semester) ?? [];
+	const groupedBySemester = groupBy(sortedCourses, 'semester');
 
 	const dispatch = useAppDispatch();
 
@@ -93,53 +98,59 @@ function CalendarAppCoursesSidebar() {
 			</Box>
 
 			<List>
-				{courses?.map((course) => (
-					<ListItem
-						divider
-						sx={(theme) => ({
-							backgroundColor: getRandomColor(course.id),
-							color: theme.palette.getContrastText(getRandomColor(course.id))
-						})}
-						className="rounded-md"
-						key={course.id}
-						secondaryAction={
-							<>
-								<IconButton
-									onClick={() => openDeleteDialog(course)}
-									color="inherit"
-									aria-label="delete"
-								>
-									<FuseSvgIcon size={20}>heroicons-outline:trash</FuseSvgIcon>
-								</IconButton>
-								<IconButton
-									onClick={() => openFormDialog(course)}
-									color="inherit"
-									aria-label="edit"
-								>
-									<FuseSvgIcon size={20}>heroicons-outline:pencil</FuseSvgIcon>
-								</IconButton>
-							</>
-						}
-					>
-						<ListItemText
-							primary={course.name}
-							primaryTypographyProps={{
-								variant: 'subtitle2'
-							}}
-							secondary={`
+				{Object.entries(groupedBySemester).map(([semester, courses]) => (
+					<Fragment key={semester}>
+						<Typography className="mt-20">ترم {semester}</Typography>
+						<Divider className="mb-10 mt-4" />
+						{courses.map((course) => (
+							<ListItem
+								divider
+								sx={(theme) => ({
+									backgroundColor: semisterColors[course.semester],
+									color: theme.palette.getContrastText(semisterColors[course.semester])
+								})}
+								className="rounded-md"
+								key={course.id}
+								secondaryAction={
+									<>
+										<IconButton
+											onClick={() => openDeleteDialog(course)}
+											color="inherit"
+											aria-label="delete"
+										>
+											<FuseSvgIcon size={20}>heroicons-outline:trash</FuseSvgIcon>
+										</IconButton>
+										<IconButton
+											onClick={() => openFormDialog(course)}
+											color="inherit"
+											aria-label="edit"
+										>
+											<FuseSvgIcon size={20}>heroicons-outline:pencil</FuseSvgIcon>
+										</IconButton>
+									</>
+								}
+							>
+								<ListItemText
+									primary={course.name}
+									primaryTypographyProps={{
+										variant: 'subtitle2'
+									}}
+									secondary={`
 								واحد: 
 								${course.unit}
 								 -
 								 ترم:
 								${course.semester}
 							`}
-							secondaryTypographyProps={{
-								className: 'opacity-80',
-								color: 'inherit',
-								fontSize: 12
-							}}
-						/>
-					</ListItem>
+									secondaryTypographyProps={{
+										className: 'opacity-80',
+										color: 'inherit',
+										fontSize: 12
+									}}
+								/>
+							</ListItem>
+						))}
+					</Fragment>
 				))}
 			</List>
 		</div>

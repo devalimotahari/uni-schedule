@@ -30,6 +30,17 @@ export function getRandomColor(str: string): string {
 	return color;
 }
 
+export const semisterColors: Record<string, string> = {
+	'1': '#624da5',
+	'2': '#00a84e',
+	'3': '#ef000f',
+	'4': '#bcabaf',
+	'5': '#14647f',
+	'6': '#8bf4c3',
+	'7': '#d3dd9f',
+	'8': '#e23ba8'
+};
+
 export const parseDateToTimeFormat = (date: Date | null): string => {
 	if (date === null) return '';
 
@@ -97,7 +108,7 @@ export const convertResultCourseToEvent = (item: ICalculateResponseResult['cours
 		start: `${startDate.toISOString().replace(/T.*$/, '')}T${item.start.substring(0, 2)}:${item.start.substring(2)}:00`,
 		end: `${endDate.toISOString().replace(/T.*$/, '')}T${item.end.substring(0, 2)}:${item.end.substring(2)}:00`,
 		allDay: false,
-		backgroundColor: getRandomColor(course.id),
+		backgroundColor: semisterColors[course.semester],
 		extendedProps: {
 			desc: item.is_prefered_time ? 'روز ترجیحی استاد' : '',
 			label: `${course.name} - ${professor.name}`

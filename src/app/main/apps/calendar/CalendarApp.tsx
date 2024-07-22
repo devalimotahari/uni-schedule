@@ -23,6 +23,9 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 		minHeight: '100%',
 		width: '100%'
 	},
+	'&  .fc-event-main': {
+		overflow: 'auto'
+	},
 	'& .fc-scrollgrid, & .fc-theme-standard td, & .fc-theme-standard th': {
 		borderColor: `${theme.palette.divider}!important`
 	},

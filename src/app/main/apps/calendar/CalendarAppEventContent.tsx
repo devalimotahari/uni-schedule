@@ -1,11 +1,13 @@
-import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import clsx from 'clsx';
-import Typography from '@mui/material/Typography';
 import { EventContentArg } from '@fullcalendar/core';
+import { Tooltip } from '@mui/material';
+import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import clsx from 'clsx';
+import { IEvent } from './calendarStore';
 
 type CalendarAppEventContentProps = {
-	eventInfo: EventContentArg & { event: Event };
+	eventInfo: EventContentArg & { event: IEvent };
 };
 
 /**
@@ -16,24 +18,35 @@ function CalendarAppEventContent(props: CalendarAppEventContentProps) {
 	const theme = useTheme();
 
 	return (
-		<Box
-			sx={{
-				backgroundColor: eventInfo.event.backgroundColor,
-				color: theme.palette.getContrastText(eventInfo.event.backgroundColor)
-			}}
-			className={clsx('flex flex-col items-center w-full rounded-4 px-8 py-2 h-22 text-white')}
+		<Tooltip
+			placement="top"
+			title={
+				<>
+					<Typography>{eventInfo.timeText}</Typography>
+					<Typography>{eventInfo.event.title}</Typography>
+					<Typography>{eventInfo.event.extendedProps.desc}</Typography>
+				</>
+			}
 		>
-			<Box className="flex items-center w-full gap-8">
-				<Typography className="text-12 font-semibold">{eventInfo.timeText}</Typography>
-				<Typography className="text-12 px-4 truncate">{eventInfo.event.title}</Typography>
-			</Box>
-			<Typography
-				variant="caption"
-				className="w-full"
+			<Box
+				sx={{
+					backgroundColor: eventInfo.event.backgroundColor,
+					color: theme.palette.getContrastText(eventInfo.event.backgroundColor)
+				}}
+				className={clsx('flex flex-col items-center w-full rounded-4 px-8 py-2')}
 			>
-				{eventInfo.event.extendedProps.desc}
-			</Typography>
-		</Box>
+				<Box className="flex items-center w-full gap-8">
+					<Typography className="text-12 font-semibold">{eventInfo.timeText}</Typography>
+					<Typography className="text-12 px-4 truncate">{eventInfo.event.title}</Typography>
+				</Box>
+				<Typography
+					variant="caption"
+					className="w-full"
+				>
+					{eventInfo.event.extendedProps.desc}
+				</Typography>
+			</Box>
+		</Tooltip>
 	);
 }
 
