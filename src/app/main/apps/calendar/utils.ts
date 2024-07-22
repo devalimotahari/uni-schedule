@@ -36,15 +36,15 @@ export const parseDateToTimeFormat = (date: Date | null): string => {
 	const hours = date.getHours();
 	const minutes = date.getMinutes();
 
-	return `${hours.toString().padStart(2, 0)}:${minutes.toString().padStart(2, 0)}`;
+	return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 };
 export const parseTimeFormatToDate = (time: string | null): Date | null => {
 	if (time == null) return null;
 
 	const [hours, minutes] = time.split(':');
 	const date = new Date();
-	date.setHours(hours);
-	date.setMinutes(minutes);
+	date.setHours(+hours);
+	date.setMinutes(+minutes);
 
 	return date;
 };
@@ -83,7 +83,7 @@ export const convertResultCourseToEvent = (item: ICalculateResponseResult['cours
 
 	const startDate = new Date();
 
-	const currentDay = startDate.getDay() - 2;
+	const currentDay = startDate.getDay() - 1;
 	const distance = dayNumToJalaliDayNum[item.day] - currentDay;
 
 	startDate.setDate(startDate.getDate() + distance);

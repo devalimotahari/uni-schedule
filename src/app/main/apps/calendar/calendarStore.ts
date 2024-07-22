@@ -16,6 +16,7 @@ export interface IEvent {
 	allDay: boolean;
 	start: string;
 	end: string;
+	backgroundColor?: string;
 	extendedProps: {
 		desc: string;
 		label: string;
