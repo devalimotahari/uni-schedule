@@ -1,16 +1,16 @@
-import { styled, useTheme } from '@mui/material/styles';
-import { useEffect, useRef, useState } from 'react';
-import FullCalendar from '@fullcalendar/react';
+import { EventContentArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import FullCalendar from '@fullcalendar/react';
+import timeGridPlugin from '@fullcalendar/timegrid';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
-import { EventContentArg } from '@fullcalendar/core';
+import { styled, useTheme } from '@mui/material/styles';
+import { useEffect, useRef, useState } from 'react';
 import CalendarAppCoursesSidebar from './CalendarAppCoursesSidebar';
-import CalendarHeader from './CalendarHeader';
-import CalendarAppProfessorsSidebar from './CalendarAppProfessorsSidebar';
 import CalendarAppEventContent from './CalendarAppEventContent';
+import CalendarAppProfessorsSidebar from './CalendarAppProfessorsSidebar';
+import CalendarHeader from './CalendarHeader';
 import { IEvent, useCalendarStore } from './calendarStore';
 import { convertResultCourseToEvent, weekDays } from './utils';
 
@@ -148,6 +148,7 @@ function CalendarApp() {
 					direction={theme.direction}
 					dayMaxEvents
 					weekends
+					initialDate={new Date(2024, 5, 2)}
 					events={resultCourses.map(convertResultCourseToEvent)}
 					// eslint-disable-next-line react/no-unstable-nested-components
 					eventContent={(eventInfo: EventContentArg & { event: IEvent }) => (

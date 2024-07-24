@@ -92,15 +92,8 @@ export const convertResultCourseToEvent = (item: ICalculateResponseResult['cours
 	const professor = professors.find((p) => p.id === item.professor_id);
 	const course = courses.find((c) => c.id === item.id);
 
-	const startDate = new Date();
-
-	const currentDay = startDate.getDay() - 1;
-	const distance = dayNumToJalaliDayNum[item.day] - currentDay;
-
-	startDate.setDate(startDate.getDate() + distance);
-
-	const endDate = new Date();
-	endDate.setDate(endDate.getDate() + distance);
+	const startDate = new Date(2024, 5, item.day + 3);
+	const endDate = new Date(2024, 5, item.day + 3);
 
 	return {
 		id: uuidv4(),
