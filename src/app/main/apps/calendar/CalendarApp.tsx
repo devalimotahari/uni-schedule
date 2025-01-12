@@ -4,12 +4,9 @@ import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import { styled, useTheme } from '@mui/material/styles';
-import { useEffect, useRef, useState } from 'react';
-import CalendarAppCoursesSidebar from './CalendarAppCoursesSidebar';
+import { useRef } from 'react';
 import CalendarAppEventContent from './CalendarAppEventContent';
-import CalendarAppProfessorsSidebar from './CalendarAppProfessorsSidebar';
 import CalendarHeader from './CalendarHeader';
 import { IEvent, useCalendarStore } from './calendarStore';
 import { convertResultCourseToEvent, weekDays } from './utils';
@@ -100,41 +97,11 @@ function CalendarApp() {
 	]);
 	const resultCourses = results[selectedResultIndex ?? 0]?.courses ?? [];
 	const calendarRef = useRef<FullCalendar>(null);
-	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
-	const [professorsSidebarOpen, setProfessorsSidebarOpen] = useState(!isMobile);
-	const [coursesSidebarOpen, setCoursesSidebarOpen] = useState(!isMobile);
 	const theme = useTheme();
-
-	useEffect(() => {
-		setProfessorsSidebarOpen(!isMobile);
-		setCoursesSidebarOpen(!isMobile);
-	}, [isMobile]);
-
-	useEffect(() => {
-		// Correct calendar dimentions after sidebar toggles
-		setTimeout(() => {
-			calendarRef.current?.getApi()?.updateSize();
-		}, 300);
-	}, [professorsSidebarOpen, coursesSidebarOpen]);
-
-	function handleToggleCoursesSidebar() {
-		setCoursesSidebarOpen(!coursesSidebarOpen);
-	}
-
-	function handleToggleProfessorsSidebar() {
-		setProfessorsSidebarOpen(!professorsSidebarOpen);
-	}
-
-	console.log({ resultCourses, aa: resultCourses.map(convertResultCourseToEvent) });
 
 	return (
 		<Root
-			header={
-				<CalendarHeader
-					onToggleCoursesSidebar={handleToggleCoursesSidebar}
-					onToggleProfessorsSidebar={handleToggleProfessorsSidebar}
-				/>
-			}
+			header={<CalendarHeader />}
 			content={
 				<FullCalendar
 					plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -157,15 +124,7 @@ function CalendarApp() {
 					ref={calendarRef}
 				/>
 			}
-			leftSidebarContent={<CalendarAppProfessorsSidebar />}
-			leftSidebarOpen={professorsSidebarOpen}
-			leftSidebarOnClose={() => setProfessorsSidebarOpen(false)}
-			leftSidebarWidth={280}
-			rightSidebarContent={<CalendarAppCoursesSidebar />}
-			rightSidebarOpen={coursesSidebarOpen}
-			rightSidebarOnClose={() => setCoursesSidebarOpen(false)}
-			rightSidebarWidth={280}
-			scroll="content"
+			scroll="page"
 		/>
 	);
 }

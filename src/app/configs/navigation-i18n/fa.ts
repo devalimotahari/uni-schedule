@@ -1,6 +1,7 @@
 const locale = {
 	APPLICATIONS: 'برنامه ها',
-	EXAMPLE: 'نمونه'
+	MAJORS: 'رشته‌های درسی',
+	CALENDAR: 'تقویم برنامه درسی'
 };
 
 export default locale;

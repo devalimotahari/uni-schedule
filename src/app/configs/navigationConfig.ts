@@ -1,6 +1,7 @@
 import { i18nNamespaces } from 'app/constants';
 import i18next from 'i18next';
 import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType';
+import { paths } from 'app/configs/paths';
 import ar from './navigation-i18n/ar';
 import en from './navigation-i18n/en';
 import tr from './navigation-i18n/tr';
@@ -16,12 +17,20 @@ i18next.addResourceBundle('fa', i18nNamespaces.navigation, fa);
  */
 const navigationConfig: FuseNavItemType[] = [
 	{
-		id: 'example-component',
-		title: 'Example',
-		translate: 'EXAMPLE',
+		id: 'majors',
+		title: 'Majors',
+		translate: 'MAJORS',
 		type: 'item',
 		icon: 'heroicons-outline:star',
-		url: 'example'
+		url: paths.majors
+	},
+	{
+		id: 'calendar',
+		title: 'Calendar',
+		translate: 'CALENDAR',
+		type: 'item',
+		icon: 'heroicons-outline:star',
+		url: paths.calendar
 	}
 ];
 

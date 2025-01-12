@@ -9,9 +9,6 @@ import { selectFuseNavbar } from 'app/theme-layouts/shared-components/navbar/nav
 import NavbarToggleButton from 'app/theme-layouts/shared-components/navbar/NavbarToggleButton';
 import clsx from 'clsx';
 import { memo } from 'react';
-import AdjustFontSize from '../../shared-components/AdjustFontSize';
-import FullScreenToggle from '../../shared-components/FullScreenToggle';
-import NavigationSearch from '../../shared-components/navigation/NavigationSearch';
 import UserMenu from '../../shared-components/UserMenu';
 
 type ToolbarMainLayoutProps = {
@@ -47,7 +44,13 @@ function ToolbarMainLayout(props: ToolbarMainLayoutProps) {
 						{config.navbar.display && config.navbar.position === 'left' && (
 							<>
 								<Hidden lgDown>
-									<NavbarToggleButton className="mx-0 h-40 w-40 p-0" />
+									{(config.navbar.style === 'style-3' || config.navbar.style === 'style-3-dense') && (
+										<NavbarToggleButton className="mx-0 h-40 w-40 p-0" />
+									)}
+
+									{config.navbar.style === 'style-1' && !navbar.open && (
+										<NavbarToggleButton className="mx-0 h-40 w-40 p-0" />
+									)}
 								</Hidden>
 
 								<Hidden lgUp>
@@ -58,9 +61,6 @@ function ToolbarMainLayout(props: ToolbarMainLayoutProps) {
 					</div>
 
 					<div className="flex h-full items-center overflow-x-auto px-8">
-						<AdjustFontSize />
-						<FullScreenToggle />
-						<NavigationSearch />
 						<UserMenu />
 					</div>
 

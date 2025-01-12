@@ -21,6 +21,8 @@ function NavbarToggleFabMainLayout(props: NavbarToggleFabMainLayoutProps) {
 
 	const dispatch = useAppDispatch();
 
+	if (!isMobile) return null;
+
 	return (
 		<NavbarToggleFab
 			className={className}

@@ -1,7 +1,5 @@
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Autocomplete } from '@mui/material';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import { useMutation } from '@tanstack/react-query';
 import { PostCalculate } from 'app/services/apiShortRequests';
@@ -9,17 +7,10 @@ import { motion } from 'framer-motion';
 import { useCalendarStore } from './calendarStore';
 import { uuidv4 } from './utils';
 
-type CalendarHeaderProps = {
-	onToggleCoursesSidebar: () => void;
-	onToggleProfessorsSidebar: () => void;
-};
-
 /**
  * The calendar header.
  */
-function CalendarHeader(props: CalendarHeaderProps) {
-	const { onToggleCoursesSidebar, onToggleProfessorsSidebar } = props;
-
+function CalendarHeader() {
 	const [professors, courses, results, selectedResultIndex, setResults, setSelectedResultIndex] = useCalendarStore(
 		(state) => [
 			state.professors,
@@ -70,16 +61,6 @@ function CalendarHeader(props: CalendarHeaderProps) {
 	return (
 		<div className="flex flex-col md:flex-row w-full p-12 justify-between z-10 container">
 			<div className="flex items-center justify-between gap-16">
-				<div className="flex items-center">
-					<IconButton
-						onClick={() => onToggleProfessorsSidebar()}
-						aria-label="open right sidebar"
-						size="small"
-					>
-						<FuseSvgIcon>heroicons-outline:menu</FuseSvgIcon>
-					</IconButton>
-				</div>
-
 				<Button
 					onClick={sendDataToCalculate}
 					disabled={professors.length === 0 || courses.length === 0 || isPending}
@@ -120,13 +101,6 @@ function CalendarHeader(props: CalendarHeaderProps) {
 						)}
 					/>
 				)}
-				<IconButton
-					onClick={() => onToggleCoursesSidebar()}
-					aria-label="open left sidebar"
-					size="small"
-				>
-					<FuseSvgIcon>heroicons-outline:menu</FuseSvgIcon>
-				</IconButton>
 			</motion.div>
 		</div>
 	);

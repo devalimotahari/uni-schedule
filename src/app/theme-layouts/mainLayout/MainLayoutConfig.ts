@@ -22,10 +22,10 @@ const MainLayoutConfig = {
 			style: 'fixed'
 		},
 		leftSidePanel: {
-			display: true
+			display: false
 		},
 		rightSidePanel: {
-			display: true
+			display: false
 		}
 	},
 	form: {
