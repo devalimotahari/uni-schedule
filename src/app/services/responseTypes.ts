@@ -1,9 +1,6 @@
-import { User } from '../auth/user';
-
 // Auth
 export interface IAuthLoginResponse {
 	access_token: string;
-	user: User;
 }
 
 // calc

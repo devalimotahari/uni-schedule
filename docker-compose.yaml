@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   webapp:
-    container_name: globalGold_web_app
+    container_name: web_app
     build:
       context: .
       dockerfile: Dockerfile

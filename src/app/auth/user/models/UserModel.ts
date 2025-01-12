@@ -11,14 +11,7 @@ function UserModel(data: PartialDeep<User>): User {
 	return _.defaults(data, {
 		id: '',
 		role: null, // guest
-		firstName: '',
-		lastName: '',
-		username: '',
-		bankAccounts: [],
-		cryptoAccounts: [],
-		email: '',
-		createdAt: 0,
-		updatedAt: 0
+		username: ''
 	});
 }
 

@@ -3,8 +3,8 @@ import history from '@history';
 import { useMutation } from '@tanstack/react-query';
 import { i18nNamespaces, LocalStorageKeys } from 'app/constants';
 import { apiClient } from 'app/services/apiClient';
-import { GetUserProfile, PostAuthLogin, PostAuthRegister, PostAuthSendCode } from 'app/services/apiShortRequests';
-import { IAuthLogin, IAuthRegister, IAuthSendCode } from 'app/services/requestTypes';
+import { PostAuthLogin, PostAuthRegister } from 'app/services/apiShortRequests';
+import { IAuthLogin, IAuthRegister } from 'app/services/requestTypes';
 import { IAuthLoginResponse } from 'app/services/responseTypes';
 import { useAppDispatch } from 'app/store/hooks';
 import { AxiosResponse, isAxiosError } from 'axios';
@@ -13,15 +13,14 @@ import React, { createContext, useCallback, useEffect, useMemo, useState } from 
 import { useTranslation } from 'react-i18next';
 import { PartialDeep } from 'type-fest';
 import { User } from '../../user';
+import UserModel from '../../user/models/UserModel';
 
 export type JwtAuthStatus = 'configuring' | 'authenticated' | 'unauthenticated';
 
 export type JwtAuthContextType = {
 	user?: User;
-	userEmail: string;
 	updateUser: (U: User) => void;
 	signIn?: (credentials: IAuthLogin) => Promise<AxiosResponse<IAuthLoginResponse>>;
-	sendCode?: (credentials: IAuthSendCode) => Promise<AxiosResponse>;
 	signUp?: (U: IAuthRegister) => Promise<AxiosResponse>;
 	signOut?: () => void;
 	refreshToken?: () => void;
@@ -34,9 +33,7 @@ const defaultAuthContext: JwtAuthContextType = {
 	isAuthenticated: false,
 	isLoading: false,
 	user: null,
-	userEmail: '',
 	updateUser: null,
-	sendCode: null,
 	signIn: null,
 	signUp: null,
 	signOut: null,
@@ -52,7 +49,6 @@ export type JwtAuthProviderProps = {
 
 function JwtAuthProvider(props: JwtAuthProviderProps) {
 	const [user, setUser] = useState<User>(null);
-	const [userEmail, setUserEmail] = useState<string>('');
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [authStatus, setAuthStatus] = useState('configuring');
 
@@ -65,26 +61,18 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 	const searchParams = new URLSearchParams(history.location.search);
 	const autoLoginToken = searchParams.get(LocalStorageKeys.autoLoginToken);
 
-	const { mutateAsync: sendCodeMutate, isPending: sendCodePending } = useMutation({
-		mutationFn: PostAuthSendCode,
-		onError: (err) => {
-			if (isAxiosError(err)) {
-				if (err.response.status === 401) {
-					dispatch(
-						showMessage({ message: t(`${i18nNamespaces.pages.signIn}:userBlocked`), variant: 'error' })
-					);
-					return;
-				}
-			}
-
-			dispatch(showMessage({ message: t(`${i18nNamespaces.pages.signIn}:userNotExist`), variant: 'error' }));
-		}
-	});
-
 	const { mutateAsync: loginMutate, isPending: loginPending } = useMutation({
 		mutationFn: PostAuthLogin,
 		onSuccess: (res) => {
-			handleSignInSuccess(res.data.user, res.data.access_token);
+			handleSignInSuccess(
+				UserModel({
+					role: 'user'
+				}),
+				res.data.access_token
+			);
+		},
+		onError: () => {
+			dispatch(showMessage({ message: t(`${i18nNamespaces.pages.signIn}:userNotExist`), variant: 'error' }));
 		}
 	});
 
@@ -105,11 +93,7 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 		}
 	});
 
-	const { mutateAsync: profileMutate, isPending: profilePending } = useMutation({
-		mutationFn: GetUserProfile
-	});
-
-	const isLoading: boolean = sendCodePending || loginPending || registerPending || profilePending;
+	const isLoading: boolean = loginPending || registerPending;
 
 	/**
 	 * Handle sign-in success
@@ -146,7 +130,7 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 			try {
 				const decoded = jwtDecode<JwtPayload>(accessToken);
 				const currentTime = Math.floor(Date.now() / 1000);
-				return decoded.exp > currentTime;
+				return !decoded.exp || decoded.exp > currentTime;
 			} catch (error) {
 				return false;
 			}
@@ -168,21 +152,19 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 			}
 
 			if (isTokenValid(accessToken)) {
-				try {
-					const response = await profileMutate({ token: accessToken });
-					const userData = response?.data;
+				handleSignInSuccess(
+					UserModel({
+						role: 'user'
+					}),
+					accessToken
+				);
 
-					handleSignInSuccess(userData, accessToken);
-
-					return true;
-				} catch (error) {
-					signOut();
-					return false;
-				}
-			} else {
-				resetSession();
-				return false;
+				return true;
 			}
+
+			signOut();
+			resetSession();
+			return false;
 		};
 
 		if (!isAuthenticated) {
@@ -191,11 +173,6 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 			});
 		}
 	}, [isTokenValid, setSession, getAccessToken, isAuthenticated]);
-
-	const sendCode = useCallback((credentials: IAuthSendCode) => {
-		setUserEmail(credentials.email);
-		return sendCodeMutate(credentials);
-	}, []);
 
 	const signIn = (credentials: IAuthLogin) => {
 		return loginMutate(credentials);
@@ -254,12 +231,10 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 		() =>
 			({
 				user,
-				userEmail,
 				isAuthenticated,
 				authStatus,
 				isLoading,
 				signIn,
-				sendCode,
 				signUp,
 				signOut,
 				updateUser

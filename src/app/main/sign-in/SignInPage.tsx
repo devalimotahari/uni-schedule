@@ -1,34 +1,17 @@
 import Typography from '@mui/material/Typography';
 import { i18nNamespaces } from 'app/constants';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import CardContent from '@mui/material/CardContent';
-import SignInOtpForm from './SignInOtpForm';
-import SignInSendCodeForm from './SignInSendCodeForm';
-
-enum Steps {
-	Password,
-	OTP
-}
+import SignInForm from './SignInForm';
 
 /**
  * The sign in page.
  */
 function SignInPage() {
 	const { t } = useTranslation(i18nNamespaces.pages.signIn);
-
-	const [step, setStep] = useState<Steps>(Steps.Password);
-
-	const goToOtp = () => {
-		setStep(Steps.OTP);
-	};
-
-	const backToPassword = () => {
-		setStep(Steps.Password);
-	};
 
 	return (
 		<div className="flex min-w-0 flex-1 flex-col items-center sm:flex-row sm:justify-center md:items-start md:justify-start">
@@ -52,8 +35,7 @@ function SignInPage() {
 							{t('signUp')}
 						</Link>
 					</div>
-					{step === Steps.Password && <SignInSendCodeForm onSuccess={goToOtp} />}
-					{step === Steps.OTP && <SignInOtpForm onBackStep={backToPassword} />}
+					<SignInForm />
 				</CardContent>
 			</Paper>
 

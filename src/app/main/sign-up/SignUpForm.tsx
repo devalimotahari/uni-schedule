@@ -1,5 +1,5 @@
 import { validationMessages } from 'app/configs/validationMessages-i18n';
-import { i18nNamespaces, RegExps } from 'app/constants';
+import { i18nNamespaces } from 'app/constants';
 import { Controller, useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -8,26 +8,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import useJwtAuth from '../../auth/services/jwt/useJwtAuth';
+
 /**
  * Form Validation Schema
  */
 const schema = z
 	.object({
-		firstName: z.string().min(1, validationMessages('required')),
-		lastName: z.string().min(1, validationMessages('required')),
-		username: z
-			.string()
-			.regex(RegExps.username, validationMessages('username'))
-			.min(1, validationMessages('required')),
-		email: z.string().min(1, validationMessages('required')).email(validationMessages('email')),
-		password: z
-			.string()
-			.regex(RegExps.password, validationMessages('password'))
-			.min(10, validationMessages('min', { length: 10 })),
-		passwordConfirm: z
-			.string()
-			.regex(RegExps.password, validationMessages('password'))
-			.min(10, validationMessages('min', { length: 10 }))
+		username: z.string().min(1, validationMessages('required')),
+		password: z.string().min(1, validationMessages('min', { length: 1 })),
+		passwordConfirm: z.string().min(1, validationMessages('min', { length: 1 }))
 	})
 	.refine((data) => data.password === data.passwordConfirm, {
 		message: validationMessages('passwordConfirm'),
@@ -37,9 +26,6 @@ const schema = z
 type FormType = z.infer<typeof schema>;
 
 const defaultValues: FormType = {
-	firstName: '',
-	lastName: '',
-	email: '',
 	username: '',
 	password: '',
 	passwordConfirm: ''
@@ -59,11 +45,8 @@ function SignUpForm() {
 	const { isValid, dirtyFields } = formState;
 
 	function onSubmit(formData: FormType) {
-		const { firstName, lastName, username, email, password } = formData;
+		const { username, password } = formData;
 		signUp({
-			firstName,
-			lastName,
-			email,
 			password,
 			username
 		});
@@ -76,61 +59,6 @@ function SignUpForm() {
 			className="mt-32 flex w-full flex-col justify-center"
 			onSubmit={handleSubmit(onSubmit)}
 		>
-			<Controller
-				name="firstName"
-				control={control}
-				render={({ field, fieldState }) => (
-					<TextField
-						{...field}
-						className="mb-24"
-						label={t('firstName')}
-						autoFocus
-						type="text"
-						error={!!fieldState.error}
-						helperText={fieldState.error?.message}
-						variant="outlined"
-						required
-						fullWidth
-					/>
-				)}
-			/>
-
-			<Controller
-				name="lastName"
-				control={control}
-				render={({ field, fieldState }) => (
-					<TextField
-						{...field}
-						className="mb-24"
-						label={t('lastName')}
-						type="text"
-						error={!!fieldState.error}
-						helperText={fieldState.error?.message}
-						variant="outlined"
-						required
-						fullWidth
-					/>
-				)}
-			/>
-
-			<Controller
-				name="email"
-				control={control}
-				render={({ field, fieldState }) => (
-					<TextField
-						{...field}
-						className="mb-24"
-						label={t('email')}
-						type="email"
-						error={!!fieldState.error}
-						helperText={fieldState.error?.message}
-						variant="outlined"
-						required
-						fullWidth
-					/>
-				)}
-			/>
-
 			<Controller
 				name="username"
 				control={control}

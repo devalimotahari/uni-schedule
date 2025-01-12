@@ -1,21 +1,9 @@
 // Auth
-export interface IAuthSendCode {
-	email: string;
+export interface IAuthLogin {
+	username: string;
 	password: string;
 }
-export interface IAuthLogin {
-	email: string;
-	totp: string;
-}
-export interface IAuthForgotPassword {
-	email?: string;
-	newPassword?: string;
-	hash?: string;
-}
 export interface IAuthRegister {
-	firstName: string;
-	lastName: string;
-	email: string;
 	username: string;
 	password: string;
 }
