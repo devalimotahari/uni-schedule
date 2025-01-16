@@ -24,3 +24,18 @@ export const LocalStorageKeys = {
 	jwtToken: 'jwt-access-token',
 	autoLoginToken: 'auto-login-token'
 };
+
+export const queryKeys = {
+	majors: {
+		list: ['majors', 'list']
+	},
+	classrooms: {
+		list: ['classrooms', 'list']
+	},
+	courses: {
+		list: ['courses', 'list']
+	},
+	professors: {
+		list: ['professors', 'list']
+	}
+};
