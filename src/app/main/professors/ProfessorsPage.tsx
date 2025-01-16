@@ -15,9 +15,11 @@ import useGetProfessors from '../../hooks/api/useGetProfessors';
 import useDialogStatus from '../../hooks/useDialogStatus';
 import ProfessorsFormDialog from './form/ProfessorsFormDialog';
 import { weekDays } from '../../utils/utils';
+import useGetMajors from '../../hooks/api/useGetMajors';
 
 function ProfessorPage() {
 	const { data: professors, isLoading, refetch } = useGetProfessors();
+	const { data: majors } = useGetMajors();
 
 	const { formDialogStatus, openDialog, closeDialog } = useDialogStatus<IProfessor>();
 	const dispatch = useAppDispatch();
@@ -32,23 +34,38 @@ function ProfessorPage() {
 		}
 	});
 
+	const majorColumnOptions = useMemo(
+		() =>
+			majors?.map((m) => ({
+				label: m.name,
+				value: m.name
+			})),
+		[majors]
+	);
+
 	const columns = useMemo<MRT_ColumnDef<IProfessor>[]>(
 		() => [
 			{
 				accessorKey: 'full_name',
-				header: 'نام و نام خانوادگی'
+				header: 'نام و نام خانوادگی',
+				filterFn: 'contains'
 			},
 			{
 				accessorKey: 'major.name',
-				header: 'رشته درسی'
+				header: 'رشته درسی',
+				filterVariant: 'autocomplete',
+				filterSelectOptions: majorColumnOptions,
+				filterFn: 'equalsString'
 			},
 			{
 				accessorKey: 'min_hour',
-				header: 'حداقل ساعت مجاز تدریس'
+				header: 'حداقل ساعت مجاز تدریس',
+				filterFn: 'equals'
 			},
 			{
 				accessorKey: 'max_hour',
-				header: 'حداکثر ساعت مجاز تدریس'
+				header: 'حداکثر ساعت مجاز تدریس',
+				filterFn: 'equals'
 			},
 			{
 				accessorKey: 'preferred_days',
@@ -57,7 +74,7 @@ function ProfessorPage() {
 				Cell: ({ cell }) => (cell.getValue() as Array<number>)?.map((d) => weekDays[d])?.join(' - ') || '---'
 			}
 		],
-		[]
+		[majorColumnOptions]
 	);
 	return (
 		<PageTemplate<IProfessor>
