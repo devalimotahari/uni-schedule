@@ -9,7 +9,6 @@ import { lazy, memo, ReactNode, Suspense, useContext } from 'react';
 import { useRoutes } from 'react-router-dom';
 import NavbarWrapperMainLayout from 'app/theme-layouts/mainLayout/components/NavbarWrapperMainLayout';
 import ToolbarMainLayout from 'app/theme-layouts/mainLayout/components/ToolbarMainLayout';
-import Configurator from 'app/theme-layouts/shared-components/configurator/Configurator';
 
 const FuseDialog = lazy(() => import('@fuse/core/FuseDialog/FuseDialog'));
 
@@ -58,10 +57,11 @@ function MainLayout(props: MainLayoutProps) {
 					{config.toolbar.display && (
 						<ToolbarMainLayout className={config.toolbar.style === 'fixed' ? 'sticky top-0' : ''} />
 					)}
-
+					{/*
 					<div className="sticky top-0 z-99">
 						<Configurator />
 					</div>
+					*/}
 
 					<div className="relative z-10 flex min-h-0 flex-auto flex-col">
 						<FuseSuspense>{useRoutes(routes)}</FuseSuspense>

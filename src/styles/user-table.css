@@ -1,0 +1,87 @@
+.MuiTableContainer-root > table.MuiTable-root {
+    border-collapse: separate;
+    border-spacing: 0 1rem;
+}
+
+.MuiTableContainer-root > table .Mui-TableHeadCell-Content div:not(:first-child), .Mui-TableHeadCell-Content div:first-child span {
+    visibility: hidden;
+}
+
+.MuiTableContainer-root > table .Mui-TableHeadCell-Content:hover div:not(:first-child), .Mui-TableHeadCell-Content:hover div:first-child span {
+    visibility: visible;
+}
+
+.MuiTableContainer-root > table thead tr.MuiTableRow-root.MuiTableRow-head {
+    box-shadow: none;
+    margin-bottom: 1rem;
+}
+
+.MuiTableContainer-root.density-spacious > table thead tr.MuiTableRow-root.MuiTableRow-head th {
+    @apply py-20;
+}
+.MuiTableContainer-root.density-comfortable > table thead tr.MuiTableRow-root.MuiTableRow-head th {
+    @apply py-16;
+}
+.MuiTableContainer-root.density-compact > table thead tr.MuiTableRow-root.MuiTableRow-head th {
+    @apply py-12;
+}
+.MuiTableContainer-root:not(.dark) > table thead tr.MuiTableRow-root.MuiTableRow-head th {
+    @apply border-none bg-gray-200;
+}
+.MuiTableContainer-root > table thead tr.MuiTableRow-root.MuiTableRow-head th {
+    @apply border-none bg-gray-800;
+}
+
+
+.MuiTableContainer-root > table thead tr.MuiTableRow-root.MuiTableRow-head th:before {
+    content: ' ';
+    position: absolute;
+    display: inline-block;
+    width: 2px;
+    border-radius: 10px;
+    height: 12px;
+    left: 0;
+    top: 40%;
+    background-color: #3641634F;
+}
+
+.MuiTableContainer-root > table thead tr.MuiTableRow-root.MuiTableRow-head th:first-child {
+    @apply rounded-s-2xl;
+}
+
+.MuiTableContainer-root > table thead tr.MuiTableRow-root.MuiTableRow-head th:last-child {
+    @apply rounded-e-2xl;
+}
+
+.MuiTableContainer-root > table thead tr.MuiTableRow-root.MuiTableRow-head th:last-child:before {
+    content: none;
+}
+
+.MuiTableContainer-root:not(.dark) > table tbody.MuiTableBody-root tr td:not(.Mui-TableBodyCell-DetailPanel) {
+    @apply border-y-2 border-gray-300;
+}
+
+.MuiTableContainer-root.dark > table tbody.MuiTableBody-root tr td:not(.Mui-TableBodyCell-DetailPanel) {
+    @apply border-y-2 border-gray-600;
+}
+
+.MuiTableContainer-root:not(.dark) > table tbody.MuiTableBody-root tr:nth-child(odd) td:not(.Mui-TableBodyCell-DetailPanel) {
+    @apply border-gray-100;
+}
+
+.MuiTableContainer-root.dark > table tbody.MuiTableBody-root tr:nth-child(odd) td:not(.Mui-TableBodyCell-DetailPanel) {
+    @apply border-gray-800;
+}
+
+.MuiTableContainer-root > table tbody.MuiTableBody-root tr td:not(.Mui-TableBodyCell-DetailPanel):first-child {
+    @apply border-s-2 rounded-s-2xl;
+}
+
+
+.MuiTableContainer-root > table tbody.MuiTableBody-root tr td:not(.Mui-TableBodyCell-DetailPanel):last-child {
+    @apply border-e-2 rounded-e-2xl;
+}
+
+.MuiTableContainer-root > table tbody.MuiTableBody-root tr td:not(.Mui-TableBodyCell-DetailPanel):last-child:before {
+    box-shadow: none;
+}

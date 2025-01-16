@@ -40,9 +40,9 @@ export const themesConfig: FuseThemesType = {
 				contrastText: darkPaletteText.primary
 			},
 			secondary: {
-				light: '#818cf8',
-				main: '#4f46e5',
-				dark: '#3730a3',
+				light: '#6e6bfd',
+				main: '#5D5AFF',
+				dark: '#4541ff',
 				contrastText: darkPaletteText.primary
 			},
 			background: {
@@ -60,33 +60,38 @@ export const themesConfig: FuseThemesType = {
 	defaultDark: {
 		palette: {
 			mode: 'dark',
-			divider: 'rgba(241,245,249,.12)',
-			text: darkPaletteText,
+			text: {
+				primary: '#E0E0E0',
+				secondary: '#B0BEC5',
+				disabled: 'rgb(149, 156, 169)'
+			},
 			common: {
-				black: 'rgb(17, 24, 39)',
-				white: 'rgb(255, 255, 255)'
+				black: '#000000',
+				white: '#FFFFFF'
 			},
 			primary: {
-				light: '#64748b',
-				main: '#334155',
-				dark: '#0f172a',
-				contrastText: darkPaletteText.primary
+				light: '#536D89',
+				main: '#0A74DA',
+				dark: '#00418A',
+				contrastText: '#FFFFFF'
 			},
 			secondary: {
-				light: '#818cf8',
-				main: '#4f46e5',
-				dark: '#3730a3',
-				contrastText: darkPaletteText.primary
+				light: '#6BC9F7',
+				main: '#00A4EF',
+				dark: '#0078D7',
+				contrastText: '#FFFFFF'
 			},
 			background: {
-				paper: '#1e293b',
-				default: '#111827'
+				paper: '#1E1E1E',
+				default: '#121212'
 			},
 			error: {
-				light: '#ffcdd2',
-				main: '#f44336',
-				dark: '#b71c1c'
-			}
+				light: '#FFCDD2',
+				main: '#D32F2F',
+				dark: '#B71C1C',
+				contrastText: '#FFFFFF'
+			},
+			divider: 'rgba(79,79,79,0.5)'
 		}
 	},
 	darkBlueSilver: {

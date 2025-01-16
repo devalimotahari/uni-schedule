@@ -1,82 +1,30 @@
-import { MaterialReactTable, useMaterialReactTable, MaterialReactTableProps, MRT_Icons } from 'material-react-table';
+import { MaterialReactTable, MaterialReactTableProps, useMaterialReactTable } from 'material-react-table';
 import _ from '@lodash';
 import { useMemo } from 'react';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Theme } from '@mui/material/styles/createTheme';
+import { MRT_Localization_FA } from 'material-react-table/locales/fa';
+import clsx from 'clsx';
+import { useTheme } from '@mui/material/styles';
 import DataTableTopToolbar from './DataTableTopToolbar';
 
-const tableIcons: Partial<MRT_Icons> = {
-	ArrowDownwardIcon: (props) => (
-		<FuseSvgIcon
-			size={20}
-			{...props}
-		>
-			heroicons-outline:arrow-down
-		</FuseSvgIcon>
-	),
-	ClearAllIcon: () => <FuseSvgIcon size={20}>heroicons-outline:menu-alt-3</FuseSvgIcon>, // Adjusted, closest match
-	DensityLargeIcon: () => <FuseSvgIcon size={20}>heroicons-outline:menu-alt-4</FuseSvgIcon>, // Adjusted, closest match
-	DensityMediumIcon: () => <FuseSvgIcon size={20}>heroicons-outline:menu</FuseSvgIcon>, // Adjusted, closest match
-	DensitySmallIcon: () => <FuseSvgIcon size={20}>heroicons-outline:view-list</FuseSvgIcon>, // Adjusted, closest match
-	DragHandleIcon: () => (
-		<FuseSvgIcon
-			className="rotate-45"
-			size={16}
-		>
-			heroicons-outline:arrows-expand
-		</FuseSvgIcon>
-	), // Adjusted, closest match
-	FilterListIcon: (props) => (
-		<FuseSvgIcon
-			size={16}
-			{...props}
-		>
-			heroicons-outline:filter
-		</FuseSvgIcon>
-	),
-	FilterListOffIcon: () => <FuseSvgIcon size={20}>heroicons-outline:filter</FuseSvgIcon>, // Heroicons may not have a direct match for "off" state; consider custom handling
-	FullscreenExitIcon: () => <FuseSvgIcon size={20}>heroicons-outline:arrows-expand</FuseSvgIcon>, // Adjusted, closest match
-	FullscreenIcon: () => <FuseSvgIcon size={20}>heroicons-outline:arrows-expand</FuseSvgIcon>,
-	SearchIcon: (props) => (
-		<FuseSvgIcon
-			color="action"
-			size={20}
-			{...props}
-		>
-			heroicons-outline:search
-		</FuseSvgIcon>
-	),
-	SearchOffIcon: () => <FuseSvgIcon size={20}>heroicons-outline:search</FuseSvgIcon>, // Heroicons may not have a direct match for "off" state; consider custom handling
-	ViewColumnIcon: () => <FuseSvgIcon size={20}>heroicons-outline:view-boards</FuseSvgIcon>,
-	MoreVertIcon: () => <FuseSvgIcon size={20}>heroicons-outline:dots-vertical</FuseSvgIcon>,
-	MoreHorizIcon: () => <FuseSvgIcon size={20}>heroicons-outline:dots-horizontal</FuseSvgIcon>,
-	SortIcon: (props) => (
-		<FuseSvgIcon
-			size={20}
-			{...props}
-		>
-			heroicons-outline:sort-ascending
-		</FuseSvgIcon>
-	), // Adjusted, closest match
-	PushPinIcon: (props) => (
-		<FuseSvgIcon
-			size={20}
-			{...props}
-		>
-			heroicons-outline:thumb-tack
-		</FuseSvgIcon>
-	), // Adjusted, closest match
-	VisibilityOffIcon: () => <FuseSvgIcon size={20}>heroicons-outline:eye-off</FuseSvgIcon>
-};
+import 'src/styles/user-table.css';
 
 function DataTable<TData>(props: MaterialReactTableProps<TData>) {
 	const { columns, data, ...rest } = props;
 
+	const {
+		palette: { mode: themeMode }
+	} = useTheme();
+
 	const defaults = useMemo(
 		() =>
 			_.defaults(rest, {
+				localization: MRT_Localization_FA,
+				columnResizeDirection: 'rtl',
+				enableGlobalFilterModes: false,
+				globalFilterModeOptions: ['contains'],
 				initialState: {
-					density: 'spacious',
+					density: 'comfortable',
 					showColumnFilters: false,
 					showGlobalFilter: true,
 					columnPinning: {
@@ -95,7 +43,7 @@ function DataTable<TData>(props: MaterialReactTableProps<TData>) {
 				enableColumnPinning: true,
 				enableFacetedValues: true,
 				enableRowActions: true,
-				enableRowSelection: true,
+				enableRowSelection: false,
 				muiBottomToolbarProps: {
 					className: 'flex items-center min-h-56 h-56'
 				},
@@ -104,9 +52,9 @@ function DataTable<TData>(props: MaterialReactTableProps<TData>) {
 					square: true,
 					className: 'flex flex-col flex-auto h-full'
 				},
-				muiTableContainerProps: {
-					className: 'flex-auto'
-				},
+				muiTableContainerProps: ({ table }) => ({
+					className: clsx('flex-auto', `density-${table.getState().density}`, { dark: themeMode === 'dark' })
+				}),
 				enableStickyHeader: true,
 				// enableStickyFooter: true,
 				paginationDisplayMode: 'pages',
@@ -140,6 +88,9 @@ function DataTable<TData>(props: MaterialReactTableProps<TData>) {
 				},
 				muiSelectCheckboxProps: {
 					className: 'w-48'
+				},
+				muiTableBodyCellProps: {
+					align: 'left'
 				},
 				muiTableBodyRowProps: ({ row, table }) => {
 					const { density } = table.getState();
@@ -178,6 +129,7 @@ function DataTable<TData>(props: MaterialReactTableProps<TData>) {
 							color: (theme: Theme) => theme.palette.text.disabled,
 							fontSize: 11
 						},
+						align: 'left',
 						backgroundColor: (theme) => (column.getIsPinned() ? theme.palette.background.paper : 'inherit')
 					}
 				}),
@@ -187,8 +139,7 @@ function DataTable<TData>(props: MaterialReactTableProps<TData>) {
 					pinnedRowBackgroundColor: theme.palette.background.paper,
 					pinnedColumnBackgroundColor: theme.palette.background.paper
 				}),
-				renderTopToolbar: (_props) => <DataTableTopToolbar {..._props} />,
-				icons: tableIcons
+				renderTopToolbar: (_props) => <DataTableTopToolbar {..._props} />
 			} as Partial<MaterialReactTableProps<TData>>),
 		[rest]
 	);

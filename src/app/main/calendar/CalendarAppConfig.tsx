@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { paths } from 'app/configs/paths';
 
 const CalendarApp = lazy(() => import('./CalendarApp'));
 
@@ -13,7 +14,7 @@ const CalendarAppConfig = {
 	},
 	routes: [
 		{
-			path: '/apps/calendar',
+			path: paths.calendar,
 			element: <CalendarApp />
 		}
 	]

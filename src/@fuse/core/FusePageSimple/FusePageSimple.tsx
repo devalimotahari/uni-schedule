@@ -69,8 +69,11 @@ const Root = styled('div')<FusePageSimpleProps>(({ theme, ...props }) => ({
 	},
 
 	'& .FusePageSimple-header': {
+		backgroundColor: theme.palette.background.paper,
 		display: 'flex',
 		flex: '0 0 auto',
+		width: '100%',
+		padding: 20,
 		backgroundSize: 'cover'
 	},
 

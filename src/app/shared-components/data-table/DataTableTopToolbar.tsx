@@ -42,6 +42,7 @@ function DataTableTopToolbar<TData extends MRT_RowData>({ table }: MRT_TopToolba
 	const stackAlertBanner = isMobile || !!renderTopToolbarCustomActions || (showGlobalFilter && isTablet);
 
 	const globalFilterProps = {
+		placeholder: 'جستجو',
 		sx: !isTablet
 			? {
 					zIndex: 2

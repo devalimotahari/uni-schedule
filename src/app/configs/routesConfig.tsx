@@ -3,6 +3,7 @@ import FuseLoading from '@fuse/core/FuseLoading';
 import { Navigate } from 'react-router-dom';
 import settingsConfig from 'app/configs/settingsConfig';
 import { FuseRouteConfigsType, FuseRoutesType } from '@fuse/utils/FuseUtils';
+import { paths } from 'app/configs/paths';
 import SignInConfig from '../main/sign-in/SignInConfig';
 import SignUpConfig from '../main/sign-up/SignUpConfig';
 import Error404Page from '../main/404/Error404Page';
@@ -29,7 +30,7 @@ const routes: FuseRoutesType = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),
 	{
 		path: '/',
-		element: <Navigate to="/apps/calendar" />,
+		element: <Navigate to={paths.calendar} />,
 		auth: settingsConfig.defaultAuth
 	},
 	{

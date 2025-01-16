@@ -1,9 +1,9 @@
 import { fuseDark } from '@fuse/colors';
+import { FuseSettingsConfigType } from '@fuse/core/FuseSettings/FuseSettings';
 import { lightBlue, red } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
-import qs from 'qs';
 import { ThemeOptions } from '@mui/material/styles/createTheme';
-import { FuseSettingsConfigType } from '@fuse/core/FuseSettings/FuseSettings';
+import qs from 'qs';
 
 /**
  * The defaultTheme object defines the default color palette for the application.
@@ -117,7 +117,7 @@ export const defaultThemeOptions = {
 		},
 		MuiButtonBase: {
 			defaultProps: {
-				disableRipple: true
+				disableRipple: false
 			}
 		},
 		MuiButton: {
@@ -132,16 +132,16 @@ export const defaultThemeOptions = {
 					// lineHeight: 1,
 				},
 				sizeMedium: {
-					borderRadius: 20,
+					// borderRadius: 20,
 					height: 40,
 					minHeight: 40,
 					maxHeight: 40
 				},
 				sizeSmall: {
-					borderRadius: '15px'
+					// borderRadius: '15px'
 				},
 				sizeLarge: {
-					borderRadius: '28px'
+					// borderRadius: '28px'
 				},
 				contained: {
 					boxShadow: 'none',
@@ -157,7 +157,7 @@ export const defaultThemeOptions = {
 			},
 			styleOverrides: {
 				contained: {
-					borderRadius: 18
+					// borderRadius: 18
 				}
 			}
 		},
