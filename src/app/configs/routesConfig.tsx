@@ -6,7 +6,7 @@ import { FuseRouteConfigsType, FuseRoutesType } from '@fuse/utils/FuseUtils';
 import SignInConfig from '../main/sign-in/SignInConfig';
 import SignUpConfig from '../main/sign-up/SignUpConfig';
 import Error404Page from '../main/404/Error404Page';
-import CalendarAppConfig from '../main/apps/calendar/CalendarAppConfig';
+import CalendarAppConfig from '../main/calendar/CalendarAppConfig';
 import MajorsPageConfig from '../main/majors/MajorsPageConfig';
 import ProfessorsPageConfig from '../main/professors/ProfessorsPageConfig';
 import CoursesPageConfig from '../main/courses/CoursesPageConfig';
