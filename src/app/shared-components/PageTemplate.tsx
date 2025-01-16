@@ -56,6 +56,7 @@ function PageTemplate<T>({
 						{titleEndElement}
 					</Box>
 				}
+				scroll="page"
 				content={
 					<section className="w-full h-full p-12 md:p-24">
 						{isShowPaper && (

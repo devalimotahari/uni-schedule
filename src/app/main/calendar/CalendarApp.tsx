@@ -3,15 +3,15 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled, useTheme } from '@mui/material/styles';
 import { useRef } from 'react';
+import PageTemplate from 'app/shared-components/PageTemplate';
 import CalendarAppEventContent from './CalendarAppEventContent';
 import CalendarHeader from './CalendarHeader';
 import { IEvent, useCalendarStore } from './calendarStore';
 import { convertResultCourseToEvent, weekDays } from '../../utils/utils';
 
-const Root = styled(FusePageSimple)(({ theme }) => ({
+const Root = styled(PageTemplate)(({ theme }) => ({
 	'& a': {
 		color: `${theme.palette.text.primary}!important`,
 		textDecoration: 'none!important'
@@ -101,8 +101,10 @@ function CalendarApp() {
 
 	return (
 		<Root
-			header={<CalendarHeader />}
-			content={
+			title="تقویم برنامه درسی"
+			customFilters={<CalendarHeader />}
+		>
+			<div className="p-12 md:p-32">
 				<FullCalendar
 					plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 					headerToolbar={false}
@@ -123,9 +125,8 @@ function CalendarApp() {
 					)}
 					ref={calendarRef}
 				/>
-			}
-			scroll="page"
-		/>
+			</div>
+		</Root>
 	);
 }
 
