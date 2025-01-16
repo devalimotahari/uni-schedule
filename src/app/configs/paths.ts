@@ -4,5 +4,8 @@ export const paths = {
 		register: '/sign-up'
 	},
 	calendar: '/apps/calendar',
-	majors: '/majors'
+	majors: '/majors',
+	professors: '/professors',
+	classrooms: '/classrooms',
+	courses: '/courses'
 };

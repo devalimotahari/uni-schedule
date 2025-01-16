@@ -21,15 +21,39 @@ const navigationConfig: FuseNavItemType[] = [
 		title: 'Majors',
 		translate: 'MAJORS',
 		type: 'item',
-		icon: 'heroicons-outline:star',
+		icon: 'heroicons-outline:academic-cap',
 		url: paths.majors
+	},
+	{
+		id: 'classrooms',
+		title: 'Classrooms',
+		translate: 'CLASSROOMS',
+		type: 'item',
+		icon: 'heroicons-outline:home',
+		url: paths.classrooms
+	},
+	{
+		id: 'professors',
+		title: 'Professors',
+		translate: 'PROFESSORS',
+		type: 'item',
+		icon: 'heroicons-outline:user',
+		url: paths.professors
+	},
+	{
+		id: 'courses',
+		title: 'Courses',
+		translate: 'COURSES',
+		type: 'item',
+		icon: 'material-outline:class',
+		url: paths.courses
 	},
 	{
 		id: 'calendar',
 		title: 'Calendar',
 		translate: 'CALENDAR',
 		type: 'item',
-		icon: 'heroicons-outline:star',
+		icon: 'heroicons-outline:calendar',
 		url: paths.calendar
 	}
 ];

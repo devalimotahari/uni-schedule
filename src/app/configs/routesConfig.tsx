@@ -7,12 +7,19 @@ import SignInConfig from '../main/sign-in/SignInConfig';
 import SignUpConfig from '../main/sign-up/SignUpConfig';
 import Error404Page from '../main/404/Error404Page';
 import CalendarAppConfig from '../main/apps/calendar/CalendarAppConfig';
+import MajorsPageConfig from '../main/majors/MajorsPageConfig';
+import ProfessorsPageConfig from '../main/professors/ProfessorsPageConfig';
+import CoursesPageConfig from '../main/courses/CoursesPageConfig';
+import ClassroomsPageConfig from '../main/classrooms/ClassroomsPageConfig';
 
 const routeConfigs: FuseRouteConfigsType = [
 	CalendarAppConfig,
 	SignInConfig,
-	SignUpConfig
-	// empty
+	SignUpConfig,
+	MajorsPageConfig,
+	ProfessorsPageConfig,
+	CoursesPageConfig,
+	ClassroomsPageConfig
 ];
 
 /**
