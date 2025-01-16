@@ -181,10 +181,12 @@ function ProfessorsFormDialog({ onClose, initialData }: IFormDialogProps<IProfes
 						<Autocomplete<IMajor>
 							{...field}
 							fullWidth
-							autoHighlight
 							value={field.value as IMajor}
 							options={majors ?? []}
 							loading={majorsLoading}
+							getOptionKey={(o) => o.id}
+							isOptionEqualToValue={(o, v) => o.id === v.id}
+							filterSelectedOptions
 							getOptionLabel={(o) => `${o.name}(${o.semesters})`}
 							onChange={(e, v) => field.onChange(v)}
 							renderInput={(params) => (
