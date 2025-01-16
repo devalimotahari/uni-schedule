@@ -16,7 +16,7 @@ import { useAppDispatch } from 'app/store/hooks';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ICourse, useCalendarStore } from '../../calendarStore';
-import { commonTimePickerProps, parseDateToTimeFormat, parseTimeFormatToDate } from '../../utils';
+import { commonTimePickerProps, parseDateToTimeFormat, parseTimeFormatToDate } from '../../../../utils/utils';
 
 const schema = z.object({
 	name: z.string({ required_error: 'لطفا عنوان درس را وارد نمایید' }).min(1, 'لطفا عنوان درس را وارد نمایید'),

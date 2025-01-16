@@ -9,7 +9,7 @@ import { useRef } from 'react';
 import CalendarAppEventContent from './CalendarAppEventContent';
 import CalendarHeader from './CalendarHeader';
 import { IEvent, useCalendarStore } from './calendarStore';
-import { convertResultCourseToEvent, weekDays } from './utils';
+import { convertResultCourseToEvent, weekDays } from '../../utils/utils';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& a': {

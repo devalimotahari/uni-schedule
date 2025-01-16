@@ -9,8 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { MobileTimePicker } from '@mui/x-date-pickers';
 import { Control, Controller, useFieldArray } from 'react-hook-form';
-import { IProfessor } from '../../calendarStore';
-import { commonTimePickerProps, parseDateToTimeFormat, parseTimeFormatToDate, weekDays } from '../../../../utils/utils';
+import { commonTimePickerProps, parseDateToTimeFormat, parseTimeFormatToDate, weekDays } from 'src/app/utils/utils';
+import { ICreateProfessor } from 'app/services/requestTypes';
 
 interface IProps {
 	formControl: Control;
@@ -18,8 +18,8 @@ interface IProps {
 
 function ProfessorDaysForm({ formControl }: IProps) {
 	const { fields, append, remove } = useFieldArray({
-		control: formControl as unknown as Control<IProfessor>,
-		name: 'days'
+		control: formControl as unknown as Control<ICreateProfessor>,
+		name: 'time_slots'
 	});
 
 	return (
@@ -32,13 +32,12 @@ function ProfessorDaysForm({ formControl }: IProps) {
 				>
 					<Controller
 						control={formControl}
-						name={`days.${i}.day`}
+						name={`time_slots.${i}.day`}
 						render={({ field, fieldState }) => (
 							<FormControl fullWidth>
 								<InputLabel id="select-day-label">روز</InputLabel>
 								<Select
 									{...field}
-									size="small"
 									label="روز"
 									error={!!fieldState.error}
 									labelId="select-day-label"
@@ -59,7 +58,7 @@ function ProfessorDaysForm({ formControl }: IProps) {
 					/>
 					<Controller
 						control={formControl}
-						name={`days.${i}.startTime`}
+						name={`time_slots.${i}.start_time`}
 						render={({ field, fieldState }) => (
 							<MobileTimePicker
 								{...field}
@@ -72,7 +71,7 @@ function ProfessorDaysForm({ formControl }: IProps) {
 					/>
 					<Controller
 						control={formControl}
-						name={`days.${i}.endTime`}
+						name={`time_slots.${i}.end_time`}
 						render={({ field, fieldState }) => (
 							<MobileTimePicker
 								{...field}
@@ -84,7 +83,7 @@ function ProfessorDaysForm({ formControl }: IProps) {
 						)}
 					/>
 					<Box className="mx-5 flex gap-4">
-						<IconButton onClick={() => append({ day: 0, startTime: '', endTime: '' })}>
+						<IconButton onClick={() => append({ day: 0, start_time: '', end_time: '' })}>
 							<FuseSvgIcon>heroicons-outline:plus-circle</FuseSvgIcon>
 						</IconButton>
 						<IconButton onClick={() => remove(i)}>

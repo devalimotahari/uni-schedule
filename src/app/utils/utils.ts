@@ -1,6 +1,6 @@
 import { ICalculateResponseResult } from 'app/services/responseTypes';
 import { ControllerFieldState } from 'react-hook-form';
-import { IEvent, useCalendarStore } from './calendarStore';
+import { IEvent, useCalendarStore } from '../main/calendar/calendarStore';
 
 export const weekDays = ['شنبه', 'یک شنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
 
@@ -71,7 +71,6 @@ export const commonTimePickerProps = (fieldState: ControllerFieldState) => ({
 		},
 		textField: {
 			fullWidth: true,
-			size: 'small',
 			error: !!fieldState.error
 		}
 	}

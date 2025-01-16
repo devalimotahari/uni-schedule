@@ -2,7 +2,7 @@ import { ICalculateResponseResult } from 'app/services/responseTypes';
 import { cloneDeep } from 'lodash';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { uuidv4 } from './utils';
+import { uuidv4 } from '../../utils/utils';
 
 export interface ILabel {
 	id: string;

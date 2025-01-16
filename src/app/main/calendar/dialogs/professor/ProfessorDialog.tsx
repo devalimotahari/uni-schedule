@@ -15,7 +15,7 @@ import { useAppDispatch } from 'app/store/hooks';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { IProfessor, useCalendarStore } from '../../calendarStore';
-import { weekDays } from '../../utils';
+import { weekDays } from '../../../../utils/utils';
 import ProfessorDaysForm from './ProfessorDaysForm';
 
 const schema = z.object({

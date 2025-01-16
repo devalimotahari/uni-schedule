@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { PostCalculate } from 'app/services/apiShortRequests';
 import { motion } from 'framer-motion';
 import { useCalendarStore } from './calendarStore';
-import { uuidv4 } from './utils';
+import { uuidv4 } from '../../utils/utils';
 
 /**
  * The calendar header.
