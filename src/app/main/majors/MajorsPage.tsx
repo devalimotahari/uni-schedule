@@ -8,6 +8,8 @@ import TableEditActionButton from 'app/shared-components/data-table/TableEditAct
 import TableDeleteActionButton from 'app/shared-components/data-table/TableDeleteActionButton';
 import { DeleteMajor } from 'app/services/apiShortRequests';
 import { useMutation } from '@tanstack/react-query';
+import { useAppDispatch } from 'app/store/hooks';
+import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import useGetMajors from '../../hooks/api/useGetMajors';
 import useDialogStatus from '../../hooks/useDialogStatus';
 import MajorsFormDialog from './MajorsFormDialog';
@@ -16,11 +18,15 @@ function MajorsPage() {
 	const { data: majors, isLoading, refetch } = useGetMajors();
 
 	const { formDialogStatus, openDialog, closeDialog } = useDialogStatus<IMajor>();
+	const dispatch = useAppDispatch();
 
 	const { mutate: deleteMutate, isPending: deletePending } = useMutation({
 		mutationFn: DeleteMajor,
 		onSuccess: () => {
 			refetch();
+		},
+		onError: () => {
+			dispatch(showMessage({ message: 'مشکلی در انجام عملیات رخ داده است.', variant: 'error' }));
 		}
 	});
 

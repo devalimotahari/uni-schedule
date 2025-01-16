@@ -66,3 +66,15 @@ export interface ICourse {
 	major: IMajor;
 	classroom: IClassroom;
 }
+
+export interface ICourseLight {
+	title: string;
+	units: number;
+	duration: string;
+	semester: number;
+	calculated_hours: string;
+	major_id: number;
+	classroom_id: number;
+	id: number;
+	professors: number[];
+}
