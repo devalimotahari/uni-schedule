@@ -1,6 +1,6 @@
-import { ICalculateResponseResult } from 'app/services/responseTypes';
 import { ControllerFieldState } from 'react-hook-form';
-import { IEvent, useCalendarStore } from '../main/calendar/calendarStore';
+import { IEvent } from 'app/store/calendarStore';
+import { ISolverResultCourse } from 'app/services/responseTypes';
 
 export const weekDays = ['شنبه', 'یک شنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
 
@@ -86,24 +86,22 @@ const dayNumToJalaliDayNum = {
 	6: 5
 };
 
-export const convertResultCourseToEvent = (item: ICalculateResponseResult['courses'][number]): IEvent => {
-	const { professors, courses } = useCalendarStore.getState();
-	const professor = professors.find((p) => p.id === item.professor_id);
-	const course = courses.find((c) => c.id === item.id);
+export const convertResultCourseToEvent = (item: ISolverResultCourse): IEvent => {
+	const startDate = new Date(2024, 5, item.selected_slot.day + 3);
+	const endDate = new Date(2024, 5, item.selected_slot.day + 3);
 
-	const startDate = new Date(2024, 5, item.day + 3);
-	const endDate = new Date(2024, 5, item.day + 3);
-
-	return {
+	const data = {
 		id: uuidv4(),
-		title: `${course.name} - ${professor.name}`,
-		start: `${startDate.toISOString().replace(/T.*$/, '')}T${item.start.substring(0, 2)}:${item.start.substring(2)}:00`,
-		end: `${endDate.toISOString().replace(/T.*$/, '')}T${item.end.substring(0, 2)}:${item.end.substring(2)}:00`,
+		title: `${item.title} - ${item.selected_slot.professor_name}`,
+		start: `${startDate.toISOString().replace(/T.*$/, '')}T${item.selected_slot.start_time.substring(0, 2)}:${item.selected_slot.start_time.substring(3)}:00`,
+		end: `${endDate.toISOString().replace(/T.*$/, '')}T${item.selected_slot.end_time.substring(0, 2)}:${item.selected_slot.end_time.substring(3)}:00`,
 		allDay: false,
-		backgroundColor: semisterColors[course.semester],
+		backgroundColor: semisterColors[item.semester],
 		extendedProps: {
-			desc: item.is_prefered_time ? 'روز ترجیحی استاد' : '',
-			label: `${course.name} - ${professor.name}`
+			desc: item.selected_slot.prefered ? 'روز ترجیحی استاد' : '',
+			label: `${item.title} - ${item.selected_slot.professor_name}`
 		}
 	};
+	console.log({ data });
+	return data;
 };

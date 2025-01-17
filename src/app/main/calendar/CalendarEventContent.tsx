@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import clsx from 'clsx';
-import { IEvent } from './calendarStore';
+import { IEvent } from 'app/store/calendarStore';
 
 type CalendarAppEventContentProps = {
 	eventInfo: EventContentArg & { event: IEvent };
@@ -13,7 +13,7 @@ type CalendarAppEventContentProps = {
 /**
  * The event content for the calendar app.
  */
-function CalendarAppEventContent(props: CalendarAppEventContentProps) {
+function CalendarEventContent(props: CalendarAppEventContentProps) {
 	const { eventInfo } = props;
 	const theme = useTheme();
 
@@ -50,4 +50,4 @@ function CalendarAppEventContent(props: CalendarAppEventContentProps) {
 	);
 }
 
-export default CalendarAppEventContent;
+export default CalendarEventContent;

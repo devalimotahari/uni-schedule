@@ -1,12 +1,12 @@
 import { lazy } from 'react';
 import { paths } from 'app/configs/paths';
 
-const CalendarApp = lazy(() => import('./CalendarApp'));
+const CalendarApp = lazy(() => import('./CalendarPage'));
 
 /**
  * The Calendar App Config.
  */
-const CalendarAppConfig = {
+const CalendarPageConfig = {
 	settings: {
 		layout: {
 			config: {}
@@ -20,4 +20,4 @@ const CalendarAppConfig = {
 	]
 };
 
-export default CalendarAppConfig;
+export default CalendarPageConfig;

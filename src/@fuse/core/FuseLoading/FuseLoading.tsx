@@ -32,7 +32,7 @@ function FuseLoading(props: FuseLoadingProps) {
 				className="-mb-16 text-13 font-medium sm:text-20"
 				color="text.secondary"
 			>
-				Loading
+				در حال بارگیری ...
 			</Typography>
 			<Box
 				id="spinner"

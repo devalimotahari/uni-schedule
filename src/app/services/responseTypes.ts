@@ -3,26 +3,42 @@ export interface IAuthLoginResponse {
 	access_token: string;
 }
 
-// calc
-interface ICourseResult {
+// solver
+export interface ISolverResult {
+	name: string;
+	id: number;
+	created_at: string;
+}
+
+export interface ISolverResultCourseSelectedSlot {
 	day: number;
-	end: string;
-	id: string;
-	is_prefered_time: boolean;
-	professor_id: string;
-	start: string;
+	professor_id: number;
+	professor_name: string;
+	start_time: string;
+	end_time: string;
+	prefered: boolean;
 }
 
-export interface ICalculateResponseResult {
-	courses: ICourseResult[];
-	score: number;
+export interface ISolverResultCourse {
+	id: number;
+	title: string;
+	units: number;
+	duration: string;
+	semester: number;
+	calculated_hours: number;
+	major_id: number;
+	classroom_id: number;
+	max_classes: number;
+	group_id: number;
+	major_name: string;
+	classroom_name: string;
+	selected_slot: ISolverResultCourseSelectedSlot;
 }
 
-export interface ICalculateResponse {
-	data: {
-		resualts: ICalculateResponseResult[];
-	};
-	message: string;
+export interface ISolverResultItem extends ISolverResult {
+	resualt: Array<{
+		courses: ISolverResultCourse[];
+	}>;
 }
 
 export interface IMajor {

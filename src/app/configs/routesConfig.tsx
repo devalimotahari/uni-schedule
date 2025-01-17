@@ -7,14 +7,14 @@ import { paths } from 'app/configs/paths';
 import SignInConfig from '../main/sign-in/SignInConfig';
 import SignUpConfig from '../main/sign-up/SignUpConfig';
 import Error404Page from '../main/404/Error404Page';
-import CalendarAppConfig from '../main/calendar/CalendarAppConfig';
+import CalendarPageConfig from '../main/calendar/CalendarPageConfig';
 import MajorsPageConfig from '../main/majors/MajorsPageConfig';
 import ProfessorsPageConfig from '../main/professors/ProfessorsPageConfig';
 import CoursesPageConfig from '../main/courses/CoursesPageConfig';
 import ClassroomsPageConfig from '../main/classrooms/ClassroomsPageConfig';
 
 const routeConfigs: FuseRouteConfigsType = [
-	CalendarAppConfig,
+	CalendarPageConfig,
 	SignInConfig,
 	SignUpConfig,
 	MajorsPageConfig,

@@ -4,12 +4,12 @@ import { ApiUrls as urls } from 'app/services/apiUrls';
 import {
 	IAuthLogin,
 	IAuthRegister,
-	ICalculateBody,
 	ICreateClassroom,
 	ICreateCourse,
 	ICreateMajor,
 	ICreateProfessor,
 	IReqId,
+	IRequestToSolve,
 	IUpdateClassroom,
 	IUpdateCourse,
 	IUpdateMajor,
@@ -17,19 +17,24 @@ import {
 } from 'app/services/requestTypes';
 import {
 	IAuthLoginResponse,
-	ICalculateResponse,
 	IClassroom,
 	ICourse,
 	IMajor,
-	IProfessor
+	IProfessor,
+	ISolverResult,
+	ISolverResultItem
 } from 'app/services/responseTypes';
 
 // Auth
 export const PostAuthLogin = (body: IAuthLogin) => api.post<IAuthLoginResponse>(urls.auth.login, body);
 export const PostAuthRegister = (body: IAuthRegister) => api.post(urls.auth.register, body);
 
-// calculate
-export const PostCalculate = (body: ICalculateBody) => api.post<ICalculateResponse>(urls.calculate, body);
+// solver
+export const GetSolverResults = () => api.get<ISolverResult[]>(urls.solver.list);
+export const GetSolverResultById = ({ id }: IReqId) =>
+	api.get<ISolverResultItem>(urls.solver.getById, { urlParams: { id } });
+export const PostSolve = (data: IRequestToSolve) => api.post(urls.solver.solve, data);
+export const DeleteSolverResult = ({ id }: IReqId) => api.delete(urls.solver.delete, { urlParams: { id } });
 
 // majors
 export const GetMajors = () => api.get<IMajor[]>(urls.majors.list);

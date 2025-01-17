@@ -4,6 +4,13 @@ export const ApiUrls = {
 		register: '/auth/register'
 	},
 	calculate: '/calc',
+	solver: {
+		solve: '/solver/solve',
+		list: '/solver/resualt',
+		create: '/solver/resualt',
+		getById: '/solver/resualt/{id}',
+		delete: '/solver/resualt/{id}'
+	},
 	majors: {
 		list: '/majors',
 		create: '/majors',

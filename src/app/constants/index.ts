@@ -1,3 +1,5 @@
+import { IReqId } from 'app/services/requestTypes';
+
 export const i18nNamespaces = {
 	pages: {
 		signIn: 'signInPage',
@@ -26,6 +28,10 @@ export const LocalStorageKeys = {
 };
 
 export const queryKeys = {
+	solver: {
+		results: ['solver', 'result', 'list'],
+		byId: (params: IReqId) => ['solver', 'result', 'byId', params]
+	},
 	majors: {
 		list: ['majors', 'list']
 	},

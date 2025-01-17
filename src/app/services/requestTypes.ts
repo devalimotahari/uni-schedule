@@ -14,13 +14,12 @@ export interface IAuthRegister {
 	password: string;
 }
 
-// calculate
-export interface ICalculateBody {
-	settings: Record<string, any>;
-	data: {
-		professors: any;
-		courses: any;
-	};
+// solver
+export interface IRequestToSolve {
+	number_of_solutions: number;
+	classroom_limitation: boolean;
+	professor_min_max_time_limitation: boolean;
+	solver_resualt_name: string;
 }
 
 export type ICreateMajor = Omit<IMajor, 'id'>;
