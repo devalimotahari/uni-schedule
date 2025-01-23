@@ -48,7 +48,7 @@ function UserMenu() {
 						component="span"
 						className="flex font-semibold"
 					>
-						{user.firstName} {user.lastName}
+						{user.username}
 					</Typography>
 					{/* <Typography
 						className="text-11 font-medium capitalize"
@@ -59,27 +59,13 @@ function UserMenu() {
 					</Typography> */}
 				</div>
 
-				{user.profileImg ? (
-					<Avatar
-						sx={{
-							background: (theme) => theme.palette.background.default,
-							color: (theme) => theme.palette.text.secondary
-						}}
-						className="md:mx-4"
-						alt="user photo"
-						src={user.profileImg}
-					/>
-				) : (
-					<Avatar
-						sx={{
-							background: (theme) => darken(theme.palette.background.default, 0.05),
-							color: (theme) => theme.palette.text.secondary
-						}}
-						className="md:mx-4"
-					>
-						{user?.firstName?.[0]}
-					</Avatar>
-				)}
+				<Avatar
+					sx={{
+						background: (theme) => darken(theme.palette.background.default, 0.05),
+						color: (theme) => theme.palette.text.secondary
+					}}
+					className="md:mx-4"
+				/>
 			</Button>
 
 			<Popover
