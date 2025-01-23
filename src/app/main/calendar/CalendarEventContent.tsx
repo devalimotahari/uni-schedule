@@ -24,7 +24,8 @@ function CalendarEventContent(props: CalendarAppEventContentProps) {
 				<>
 					<Typography>{eventInfo.timeText}</Typography>
 					<Typography>{eventInfo.event.title}</Typography>
-					<Typography>{eventInfo.event.extendedProps.desc}</Typography>
+					<Typography>{eventInfo.event.extendedProps.label}</Typography>
+					<Typography fontWeight={800}>{eventInfo.event.extendedProps.desc}</Typography>
 				</>
 			}
 		>
@@ -33,13 +34,21 @@ function CalendarEventContent(props: CalendarAppEventContentProps) {
 					backgroundColor: eventInfo.event.backgroundColor,
 					color: theme.palette.getContrastText(eventInfo.event.backgroundColor)
 				}}
-				className={clsx('flex flex-col items-center w-full rounded-4 px-8 py-2')}
+				className={clsx('relative flex flex-col items-center w-full rounded-4 px-8 py-2')}
 			>
-				<Box className="flex items-center w-full gap-8">
-					<Typography className="text-12 font-semibold">{eventInfo.timeText}</Typography>
-					<Typography className="text-12 px-4 truncate">{eventInfo.event.title}</Typography>
-				</Box>
+				{!!eventInfo.event.extendedProps.desc && (
+					<span className="absolute top-0 right-0 bg-teal inline-block w-8 h-8 rounded-full" />
+				)}
+				<Typography className="text-12 font-semibold">{eventInfo.timeText}</Typography>
+				<Typography className="text-12 px-4">{eventInfo.event.title}</Typography>
 				<Typography
+					variant="caption"
+					className="w-full"
+				>
+					{eventInfo.event.extendedProps.label}
+				</Typography>
+				<Typography
+					fontWeight={800}
 					variant="caption"
 					className="w-full"
 				>

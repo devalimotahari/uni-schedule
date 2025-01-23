@@ -1,19 +1,17 @@
-import { EventContentArg } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import FullCalendar from '@fullcalendar/react';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import { styled, useTheme } from '@mui/material/styles';
-import { useRef, useState } from 'react';
-import { IEvent, useCalendarStore } from 'app/store/calendarStore';
+import { styled } from '@mui/material/styles';
+import { useMemo, useState } from 'react';
+import { useCalendarStore } from 'app/store/calendarStore';
 import FuseLoading from '@fuse/core/FuseLoading';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Autocomplete } from '@mui/material';
-import CalendarEventContent from './CalendarEventContent';
-import { convertResultCourseToEvent, weekDays } from '../../utils/utils';
+import { IMajor, IProfessor } from 'app/services/responseTypes';
+import { convertResultCourseToEvent } from '../../utils/utils';
 import useGetSolverResultById from '../../hooks/api/useGetSolverResultById';
+import useGetMajors from '../../hooks/api/useGetMajors';
+import useGetProfessors from '../../hooks/api/useGetProfessors';
+import CalendarView from './CalendarView';
 
 const Root = styled('div')(({ theme }) => ({
 	'& a': {
@@ -91,6 +89,12 @@ const Root = styled('div')(({ theme }) => ({
 	}
 }));
 
+interface IFilter {
+	major?: IMajor;
+	professor?: IProfessor;
+	semester?: number;
+}
+
 /**
  * The calendar app.
  */
@@ -101,11 +105,27 @@ function CalendarApp() {
 	]);
 
 	const { data: solverResult, isLoading } = useGetSolverResultById({ id: selectedResultId ?? undefined });
+	const { data: majors, isLoading: majorsLoading } = useGetMajors();
+	const { data: professors, isLoading: professorsLoading } = useGetProfessors();
 
 	const [resultIndex, setResultIndex] = useState<number>(0);
+	const [filter, setFilter] = useState<IFilter>({});
 
-	const calendarRef = useRef<FullCalendar>(null);
-	const theme = useTheme();
+	const handleChangeFilter = (name: keyof IFilter, value: IFilter[keyof IFilter] | null) => {
+		setFilter((o) => ({ ...o, [name]: value }));
+	};
+
+	const events = useMemo(() => {
+		const filteredCourses =
+			solverResult?.resualt?.[resultIndex]?.courses.filter(
+				(c) =>
+					(filter.major?.id ?? c.major_id) === c.major_id &&
+					(filter.semester ?? c.semester) === c.semester &&
+					(filter.professor?.id ?? c.selected_slot.professor_id) === c.selected_slot.professor_id
+			) ?? [];
+
+		return filteredCourses.map(convertResultCourseToEvent);
+	}, [solverResult, resultIndex, filter.major?.id, filter.semester, filter.professor?.id]);
 
 	if (isLoading) {
 		return <FuseLoading />;
@@ -140,10 +160,17 @@ function CalendarApp() {
 					بازگشت به لیست
 				</Button>
 			</div>
-			{solverResult.resualt.length > 1 && (
-				<div className="w-full">
+			<div className="w-full flex flex-wrap items-center gap-20">
+				<Typography
+					variant="subtitle2"
+					className="flex-1 min-w-full"
+					gutterBottom
+				>
+					فیلترها:
+				</Typography>
+				{solverResult.resualt.length > 1 && (
 					<Autocomplete<{ label: string; value: number }>
-						className="w-xs"
+						className="w-[250px]"
 						value={{ label: `برنامه شماره ${resultIndex + 1}`, value: resultIndex }}
 						options={
 							solverResult.resualt.map((_, index) => ({
@@ -163,32 +190,55 @@ function CalendarApp() {
 							/>
 						)}
 					/>
-				</div>
-			)}
-			<div className="w-full overflow-auto">
-				<div className="w-[4000rem] h-[80dvh]">
-					<FullCalendar
-						plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-						headerToolbar={false}
-						initialView="timeGridWeek"
-						locale="fa"
-						dayHeaderFormat={(arg) => {
-							return weekDays[new Date(arg.date.year, arg.date.month, arg.date.day).getDay()];
-						}}
-						allDayText="ساعت"
-						direction={theme.direction}
-						dayMaxEvents
-						weekends
-						initialDate={new Date(2024, 5, 2)}
-						events={solverResult.resualt[resultIndex]?.courses?.map(convertResultCourseToEvent) ?? []}
-						// eslint-disable-next-line react/no-unstable-nested-components
-						eventContent={(eventInfo: EventContentArg & { event: IEvent }) => (
-							<CalendarEventContent eventInfo={eventInfo} />
-						)}
-						ref={calendarRef}
-					/>
-				</div>
+				)}
+				<TextField
+					className="w-[100px]"
+					label="ترم"
+					type="number"
+					inputProps={{
+						min: 1,
+						max: 8
+					}}
+					value={filter.semester}
+					onChange={({ target: { value } }) => handleChangeFilter('semester', value ? +value : null)}
+				/>
+				<Autocomplete<IMajor>
+					className="w-xs"
+					value={filter.major}
+					loading={majorsLoading}
+					options={majors ?? []}
+					getOptionKey={(o) => o.id}
+					isOptionEqualToValue={(o, v) => o.id === v.id}
+					filterSelectedOptions
+					getOptionLabel={(o) => `${o.name} (${o.semesters})`}
+					onChange={(e, v) => handleChangeFilter('major', v)}
+					renderInput={(params) => (
+						<TextField
+							{...params}
+							label="رشته درسی"
+						/>
+					)}
+				/>
+				<Autocomplete<IProfessor>
+					className="w-xs"
+					value={filter.professor}
+					options={professors?.filter((p) => p.major_id === (filter.major?.id ?? p.major_id)) ?? []}
+					loading={professorsLoading}
+					getOptionKey={(o) => o.id}
+					autoHighlight
+					isOptionEqualToValue={(o, v) => o.id === v.id}
+					filterSelectedOptions
+					getOptionLabel={(o) => `${o.full_name} (${o.major?.name || '-'})`}
+					onChange={(e, v) => handleChangeFilter('professor', v)}
+					renderInput={(params) => (
+						<TextField
+							{...params}
+							label="استاد"
+						/>
+					)}
+				/>
 			</div>
+			<CalendarView events={events} />
 		</Root>
 	);
 }

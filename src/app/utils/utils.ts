@@ -92,16 +92,29 @@ export const convertResultCourseToEvent = (item: ISolverResultCourse): IEvent =>
 
 	const data = {
 		id: uuidv4(),
-		title: `${item.title} - ${item.selected_slot.professor_name}`,
+		title: `
+		درس 
+		${item.title}، 
+		استاد 
+		${item.selected_slot.professor_name}
+		`,
 		start: `${startDate.toISOString().replace(/T.*$/, '')}T${item.selected_slot.start_time.substring(0, 2)}:${item.selected_slot.start_time.substring(3)}:00`,
 		end: `${endDate.toISOString().replace(/T.*$/, '')}T${item.selected_slot.end_time.substring(0, 2)}:${item.selected_slot.end_time.substring(3)}:00`,
 		allDay: false,
-		backgroundColor: semisterColors[item.semester],
+		backgroundColor: getRandomColor(
+			(item.semester + item.major_id + item.classroom_id + item.selected_slot.professor_id).toString()
+		),
 		extendedProps: {
 			desc: item.selected_slot.prefered ? 'روز ترجیحی استاد' : '',
-			label: `${item.title} - ${item.selected_slot.professor_name}`
+			label: `
+				ترم 
+				${item.semester}، 
+
+				${item.classroom_name}، 
+				رشته 
+				${item.major_name}
+			`
 		}
 	};
-	console.log({ data });
 	return data;
 };
