@@ -30,6 +30,21 @@ export function getRandomColor(str: string): string {
 	return color;
 }
 
+function generateHexColorFromNumber(input: number): string {
+	// Normalize the input and calculate RGB components
+	const cappedInput = Math.abs(input % 256); // Keep within 0-255
+	const red = (cappedInput * 3) % 256; // Generate red component
+	const green = (cappedInput * 5) % 256; // Generate green component
+	const blue = (cappedInput * 7) % 256; // Generate blue component
+
+	// Generate the hex color
+	const redHex = red.toString(16).padStart(2, '0');
+	const greenHex = green.toString(16).padStart(2, '0');
+	const blueHex = blue.toString(16).padStart(2, '0');
+
+	return `#${redHex}${greenHex}${blueHex}`;
+}
+
 export const semisterColors: Record<string, string> = {
 	'1': '#624da5',
 	'2': '#00a84e',
@@ -101,9 +116,7 @@ export const convertResultCourseToEvent = (item: ISolverResultCourse): IEvent =>
 		start: `${startDate.toISOString().replace(/T.*$/, '')}T${item.selected_slot.start_time.substring(0, 2)}:${item.selected_slot.start_time.substring(3)}:00`,
 		end: `${endDate.toISOString().replace(/T.*$/, '')}T${item.selected_slot.end_time.substring(0, 2)}:${item.selected_slot.end_time.substring(3)}:00`,
 		allDay: false,
-		backgroundColor: getRandomColor(
-			(item.semester + item.major_id + item.classroom_id + item.selected_slot.professor_id).toString()
-		),
+		backgroundColor: generateHexColorFromNumber(item.semester * 7 + item.group_id),
 		extendedProps: {
 			desc: item.selected_slot.prefered ? 'روز ترجیحی استاد' : '',
 			label: `

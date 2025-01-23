@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { styled } from '@mui/material/styles';
 import { useMemo, useState } from 'react';
 import { useCalendarStore } from 'app/store/calendarStore';
@@ -7,7 +9,9 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Autocomplete } from '@mui/material';
 import { IMajor, IProfessor } from 'app/services/responseTypes';
-import { convertResultCourseToEvent } from '../../utils/utils';
+import { download, generateCsv, mkConfig } from 'export-to-csv';
+import { Download } from '@mui/icons-material';
+import { convertResultCourseToEvent, weekDays } from '../../utils/utils';
 import useGetSolverResultById from '../../hooks/api/useGetSolverResultById';
 import useGetMajors from '../../hooks/api/useGetMajors';
 import useGetProfessors from '../../hooks/api/useGetProfessors';
@@ -115,17 +119,20 @@ function CalendarApp() {
 		setFilter((o) => ({ ...o, [name]: value }));
 	};
 
-	const events = useMemo(() => {
-		const filteredCourses =
+	const filteredCourses = useMemo(() => {
+		return (
 			solverResult?.resualt?.[resultIndex]?.courses.filter(
 				(c) =>
 					(filter.major?.id ?? c.major_id) === c.major_id &&
 					(filter.semester ?? c.semester) === c.semester &&
 					(filter.professor?.id ?? c.selected_slot.professor_id) === c.selected_slot.professor_id
-			) ?? [];
-
-		return filteredCourses.map(convertResultCourseToEvent);
+			) ?? []
+		);
 	}, [solverResult, resultIndex, filter.major?.id, filter.semester, filter.professor?.id]);
+
+	const events = useMemo(() => {
+		return filteredCourses.map(convertResultCourseToEvent);
+	}, [filteredCourses]);
 
 	if (isLoading) {
 		return <FuseLoading />;
@@ -138,6 +145,35 @@ function CalendarApp() {
 			</div>
 		);
 	}
+
+	const handleExportData = () => {
+		if (!filteredCourses) return;
+
+		const csvConfig = mkConfig({
+			fieldSeparator: ',',
+			decimalSeparator: '.',
+			useKeysAsHeaders: true,
+			filename: `${solverResult?.name.replace(' ', '_')}-${resultIndex + 1}-${Date.now()}`,
+		});
+
+		const csv = generateCsv(csvConfig)(
+			filteredCourses.map((item) => ({
+				'روز هفته': weekDays[item.selected_slot.day],
+				'ساعت شروع': item.selected_slot.start_time,
+				'ساعت پایان': item.selected_slot.end_time,
+				'مدت زمان': item.duration,
+				'نام درس': item.title,
+				'واحد': item.units,
+				'ترم': item.semester,
+				'استاد': item.selected_slot.professor_name,
+				'روز ترجیحی استاد': item.selected_slot.prefered ? 'بله' : 'خیر',
+				'رشته درسی': item.major_name,
+				'محل کلاس': item.classroom_name,
+			}))
+		);
+
+		download(csvConfig)(csv);
+	};
 
 	return (
 		<Root className="w-full flex flex-col gap-44 p-12 md:p-32">
@@ -237,6 +273,14 @@ function CalendarApp() {
 						/>
 					)}
 				/>
+				<Button
+					color="secondary"
+					onClick={handleExportData}
+					disabled={!filteredCourses?.length}
+					endIcon={<Download />}
+				>
+					دانلود اکسل
+				</Button>
 			</div>
 			<CalendarView events={events} />
 		</Root>
