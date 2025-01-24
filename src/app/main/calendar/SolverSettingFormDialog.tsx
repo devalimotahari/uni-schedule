@@ -68,6 +68,7 @@ function SolverSettingFormDialog({ onClose }: IFormDialogProps<ISolverResult>) {
 			solver_resualt_name: '',
 			number_of_solutions: 1,
 			classroom_limitation: true,
+			debug: false,
 			professor_min_max_time_limitation: true
 		}
 	});
