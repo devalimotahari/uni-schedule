@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 
 export type FuseLoadingProps = {
 	delay?: number;
+	loadingText?: string;
 	className?: string;
 };
 
@@ -13,7 +14,7 @@ export type FuseLoadingProps = {
  * FuseLoading displays a loading state with an optional delay
  */
 function FuseLoading(props: FuseLoadingProps) {
-	const { delay = 0, className } = props;
+	const { delay = 0, className, loadingText = 'در حال بارگیری ...' } = props;
 	const [showLoading, setShowLoading] = useState(!delay);
 
 	useTimeout(() => {
@@ -32,7 +33,7 @@ function FuseLoading(props: FuseLoadingProps) {
 				className="-mb-16 text-13 font-medium sm:text-20"
 				color="text.secondary"
 			>
-				در حال بارگیری ...
+				{loadingText}
 			</Typography>
 			<Box
 				id="spinner"

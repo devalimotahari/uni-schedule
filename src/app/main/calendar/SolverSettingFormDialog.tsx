@@ -19,6 +19,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { Checkbox } from '@mui/material';
 import { useCalendarStore } from 'app/store/calendarStore';
 import { AxiosError, AxiosResponse } from 'axios';
+import FuseLoading from '@fuse/core/FuseLoading';
 
 const schema = z.object({
 	classroom_limitation: z.coerce.boolean({ required_error: validationMessages('required') }).default(true),
@@ -48,7 +49,7 @@ function SolverSettingFormDialog({ onClose }: IFormDialogProps<ISolverResult>) {
 		setResultId(res.data.solver_resualt_history.id);
 		onClose();
 	};
-	const onError = (error: AxiosError<{message:string}>) => {
+	const onError = (error: AxiosError<{ message: string }>) => {
 		const errorMessage = error.response?.data?.message || 'مشکلی در انجام عملیات رخ داده است.';
 		dispatch(showMessage({ message: errorMessage, variant: 'error' }));
 	};
@@ -154,6 +155,7 @@ function SolverSettingFormDialog({ onClose }: IFormDialogProps<ISolverResult>) {
 						/>
 					)}
 				/>
+				{isLoading && <FuseLoading loadingText="در حال پردازش ..." />}
 			</DialogContent>
 			<DialogActions>
 				<Button
