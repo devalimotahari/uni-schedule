@@ -18,10 +18,11 @@ import { PostSolve } from 'app/services/apiShortRequests';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Checkbox } from '@mui/material';
 import { useCalendarStore } from 'app/store/calendarStore';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 const schema = z.object({
 	classroom_limitation: z.coerce.boolean({ required_error: validationMessages('required') }).default(true),
+	debug: z.coerce.boolean({ required_error: validationMessages('required') }).default(false),
 	professor_min_max_time_limitation: z.coerce
 		.boolean({ required_error: validationMessages('required') })
 		.default(true),
@@ -47,8 +48,9 @@ function SolverSettingFormDialog({ onClose }: IFormDialogProps<ISolverResult>) {
 		setResultId(res.data.solver_resualt_history.id);
 		onClose();
 	};
-	const onError = () => {
-		dispatch(showMessage({ message: 'مشکلی در انجام عملیات رخ داده است.', variant: 'error' }));
+	const onError = (error: AxiosError<{message:string}>) => {
+		const errorMessage = error.response?.data?.message || 'مشکلی در انجام عملیات رخ داده است.';
+		dispatch(showMessage({ message: errorMessage, variant: 'error' }));
 	};
 
 	const { mutate: solveMutate, isPending: createPending } = useMutation({
@@ -66,6 +68,7 @@ function SolverSettingFormDialog({ onClose }: IFormDialogProps<ISolverResult>) {
 			solver_resualt_name: '',
 			number_of_solutions: 1,
 			classroom_limitation: true,
+			debug: false,
 			professor_min_max_time_limitation: true
 		}
 	});
@@ -137,6 +140,17 @@ function SolverSettingFormDialog({ onClose }: IFormDialogProps<ISolverResult>) {
 							{...field}
 							control={<Checkbox defaultChecked={field.value} />}
 							label="اعمال محدودیت تعداد کلاس‌ها"
+						/>
+					)}
+				/>
+				<Controller
+					control={control}
+					name="debug"
+					render={({ field }) => (
+						<FormControlLabel
+							{...field}
+							control={<Checkbox defaultChecked={field.value} />}
+							label="حالت عیب یابی"
 						/>
 					)}
 				/>
