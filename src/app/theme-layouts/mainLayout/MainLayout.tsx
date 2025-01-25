@@ -48,7 +48,7 @@ function MainLayout(props: MainLayoutProps) {
 			className="flex w-full"
 		>
 			<div className="flex min-w-0 flex-auto">
-				<NavbarWrapperMainLayout />
+				{config.toolbar.display && <NavbarWrapperMainLayout />}
 
 				<main
 					id="fuse-main"

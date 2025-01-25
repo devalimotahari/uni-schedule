@@ -120,6 +120,13 @@ export const defaultThemeOptions = {
 				disableRipple: false
 			}
 		},
+		MuiSnackbar: {
+			styleOverrides: {
+				root: {
+					zIndex: 9999999999
+				}
+			}
+		},
 		MuiButton: {
 			defaultProps: {
 				variant: 'text',
