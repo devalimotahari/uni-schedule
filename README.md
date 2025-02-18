@@ -76,7 +76,7 @@ This repository is solely for the frontend application. Key directories and file
    VITE_API_URL=<Your Backend API URL>
    ```
 
-   Replace `<Your Backend API URL>` with the URL where your Flask backend is hosted (for example, `http://localhost:5000`).
+   Replace `<Your Backend API URL>` with the URL where your Flask backend is hosted (for example, `http://localhost:8000`).
 
 ---
 
@@ -90,7 +90,7 @@ After completing the installation steps, run the following command to start the 
 yarn dev
 ```
 
-This command will start the Vite development server. The application will be available at the URL specified by Vite (usually [http://localhost:3000](http://localhost:3000)).
+This command will start the Vite development server. The application will be available at the URL specified by Vite (usually [http://localhost:5173](http://localhost:5173)).
 
 ---
 
@@ -103,7 +103,7 @@ The project is Dockerized so that you can run it in a containerized environment.
 From the root of the frontend repository, run:
 
 ```bash
-docker compose -f docker-compose.yml build
+docker compose -f docker-compose.yaml build
 ```
 
 ### Running the Docker Container
@@ -111,7 +111,7 @@ docker compose -f docker-compose.yml build
 Run the container with:
 
 ```bash
-docker compose -f docker-compose.yml up
+docker compose -f docker-compose.yaml up
 ```
 
 ---
